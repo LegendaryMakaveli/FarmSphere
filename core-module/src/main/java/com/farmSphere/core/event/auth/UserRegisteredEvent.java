@@ -1,13 +1,13 @@
 package com.farmSphere.core.event.auth;
 
-public class BuyerRegisteredEvent {
+public class UserRegisteredEvent {
     private final Long userId;
     private final String email;
     private final String firstName;
     private final String lastName;
 
 
-    public BuyerRegisteredEvent(Long userId, String email, String firstName, String lastName) {
+    public UserRegisteredEvent(Long userId, String email, String firstName, String lastName) {
         this.userId = userId;
         this.email = email;
         this.firstName = firstName;

@@ -1,7 +1,7 @@
 package com.farmSphere.auth.data.model;
 
-public enum REGISTRATION_STATUS {
-    SUBMITTED,
+public enum FarmingStatus {
+    PENDING,
     APPROVED,
     REJECTED
 }

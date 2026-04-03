@@ -22,6 +22,8 @@ public class User {
     @Column(nullable = false)
     private String secondName;
 
+    private int age;
+
     @Column(nullable = false, unique = true)
     private String email;
 
@@ -46,6 +48,6 @@ public class User {
 
     private boolean active = false;
     private boolean isVerified = false;
-    private String dateCreated;
-    private String lastLogin;
+    private LocalDateTime dateCreated;
+    private LocalDateTime lastLogin;
 }

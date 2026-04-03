@@ -20,4 +20,6 @@ public class UserRegisterRequest {
     private String address;
     @NotBlank(message = "Gender is required!")
     private GENDER gender;
+    @NotBlank(message = "Age is required!")
+    private int age;
 }

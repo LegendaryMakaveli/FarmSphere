@@ -2,6 +2,7 @@ package com.farmSphere.auth.dto.response;
 
 
 import com.farmSphere.auth.data.model.ROLE;
+import com.farmSphere.auth.data.model.UserProfileStatus;
 import lombok.Builder;
 import lombok.Data;
 
@@ -14,4 +15,5 @@ public class UserLoginResponse {
     private String email;
     private Long userId;
     private String lastLogin;
+    private UserProfileStatus profileStatus;
 }

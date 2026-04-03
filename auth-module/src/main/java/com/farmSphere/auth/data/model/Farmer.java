@@ -2,8 +2,8 @@ package com.farmSphere.auth.data.model;
 
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
+import com.farmSphere.core.enums.REGISTRATION_STATUS;
 import lombok.Setter;
 
 

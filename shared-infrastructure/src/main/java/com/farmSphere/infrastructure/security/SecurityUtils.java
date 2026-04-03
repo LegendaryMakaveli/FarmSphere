@@ -20,4 +20,10 @@ public class SecurityUtils {
                 .next()
                 .getAuthority();
     }
+
+    public static String getCurrentUserEmail() {
+        return SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getName();
+    }
 }
