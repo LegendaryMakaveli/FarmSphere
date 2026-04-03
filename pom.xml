@@ -1,0 +1,130 @@
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.4.13</version>
+    </parent>
+
+    <groupId>com.farmsphere</groupId>
+    <artifactId>FarmSphere</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>FarmSphere</name>
+    <description>FarmSphere</description>
+    <packaging>pom</packaging>
+
+    <properties>
+        <java.version>21</java.version>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <!--  Declare child modules  -->
+    <modules>
+        <module>core-module</module>
+        <module>shared-infrastructure</module>
+        <module>auth-module</module>
+        <module>estate-module</module>
+        <module>farming-module</module>
+        <module>tool-module</module>
+        <module>marketplace-module</module>
+        <module>investment-module</module>
+        <module>notification-module</module>
+        <module>app</module>
+    </modules>
+    <!--
+            dependencyManagement = "declare versions here once"
+            Child modules still have to opt in by adding the dependency
+            in their own pom.xml — but they never specify a version.
+            Nothing gets added to a module unless it asks for it.
+         -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.farmsphere</groupId>
+                <artifactId>core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>com.farmsphere</groupId>
+                <artifactId>shared-infrastructure</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>com.farmsphere</groupId>
+                <artifactId>auth-module</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>com.farmsphere</groupId>
+                <artifactId>estate-module</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>com.farmsphere</groupId>
+                <artifactId>farming-module</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>com.farmsphere</groupId>
+                <artifactId>tool-module</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>com.farmsphere</groupId>
+                <artifactId>marketplace-module</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>com.farmsphere</groupId>
+                <artifactId>investment-module</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>com.farmsphere</groupId>
+                <artifactId>notification-module</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <!--
+            Lombok annotation processor declared once here.
+            spring-boot-maven-plugin is NOT here — only in app/pom.xml
+         -->
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <annotationProcessorPaths>
+                            <path>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok</artifactId>
+                            </path>
+                        </annotationProcessorPaths>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>
