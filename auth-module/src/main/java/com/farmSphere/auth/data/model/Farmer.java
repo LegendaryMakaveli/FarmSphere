@@ -7,6 +7,7 @@ import com.farmSphere.core.enums.REGISTRATION_STATUS;
 import lombok.Setter;
 
 
+@Entity
 @Setter
 @Getter
 @Table( name = "farmers")

@@ -7,6 +7,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 
+@Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Setter
 @Getter

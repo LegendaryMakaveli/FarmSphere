@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface InvestorRepository extends JpaRepository<Investor, Long> {
-    Optional<Investor> findById(String id);
+    Optional<Investor> findById(Long id);
     Optional<Investor> findByEmail(String Email);
     boolean existsById(Long id);
     List<Investor> findAllByRegistrationStatus(REGISTRATION_STATUS status);

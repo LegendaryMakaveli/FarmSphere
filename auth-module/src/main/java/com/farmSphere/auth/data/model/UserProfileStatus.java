@@ -1,6 +1,7 @@
 package com.farmSphere.auth.data.model;
 
 
+import com.farmSphere.core.enums.REGISTRATION_STATUS;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -8,9 +9,9 @@ import lombok.Getter;
 @Builder
 public class UserProfileStatus {
     private boolean isFarmer;
-    private FarmingStatus farmerStatus;
+    private REGISTRATION_STATUS farmerStatus;
 
     private boolean isInvestor;
-    private InvestmentStatus investorStatus;
+    private REGISTRATION_STATUS investorStatus;
 
 }
