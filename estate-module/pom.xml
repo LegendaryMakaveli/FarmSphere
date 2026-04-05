@@ -9,24 +9,21 @@
         <groupId>com.farmsphere</groupId>
         <artifactId>FarmSphere</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>   <!-- points to root -->
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>estate-module</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
-        <!-- Every module gets core -->
         <dependency>
             <groupId>com.farmsphere</groupId>
             <artifactId>core</artifactId>
         </dependency>
-        <!-- Every module gets shared-infrastructure -->
         <dependency>
             <groupId>com.farmsphere</groupId>
             <artifactId>shared-infrastructure</artifactId>
         </dependency>
-        <!-- Spring Web, JPA, etc -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -34,6 +31,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
