@@ -20,10 +20,12 @@ import java.time.LocalDateTime;
 @SpringBootApplication
 @EntityScan(basePackages = {
         "com.farmSphere.auth.data.model",
-        "com.farmSphere.core",
+        "com.farmSphere.estate.data.model",
+        "com.farmSphere.core"
 })
 @EnableJpaRepositories(basePackages = {
         "com.farmSphere.auth.data.repository",
+        "com.farmSphere.estate.data.repository",
         "com.farmSphere.core",
 })
 public class FarmSphereApplication {
