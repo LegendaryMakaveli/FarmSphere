@@ -3,8 +3,10 @@ package com.farmSphere.tool.controller;
 import com.farmSphere.core.enums.BOOKING_STATUS;
 import com.farmSphere.infrastructure.response.ApiResponse;
 import com.farmSphere.infrastructure.security.SecurityUtils;
+import com.farmSphere.tool.dto.request.AddStockRequest;
 import com.farmSphere.tool.dto.request.CreateToolRequest;
 import com.farmSphere.tool.dto.request.RejectBookingRequest;
+import com.farmSphere.tool.dto.request.UpdateToolRequest;
 import com.farmSphere.tool.service.ToolBookingService;
 import com.farmSphere.tool.service.ToolService;
 import lombok.RequiredArgsConstructor;
@@ -63,5 +65,20 @@ public class AdminToolController {
     @PatchMapping("/bookings/{bookingId}/return")
     public ResponseEntity<ApiResponse<?>> returnTool(@PathVariable Long bookingId) {
         return ResponseEntity.ok(ApiResponse.success("Tool returned", bookingService.returnTool(bookingId)));
+    }
+
+    @GetMapping("/get-tool/{toolId}")
+    public ResponseEntity<ApiResponse<?>> getToolById(@PathVariable Long toolId) {
+        return ResponseEntity.ok(ApiResponse.success("Tool fetched", toolService.getToolById(toolId)));
+    }
+
+    @PatchMapping("/update-tool/{toolId}")
+    public ResponseEntity<ApiResponse<?>> updateTool(@PathVariable Long toolId, @RequestBody UpdateToolRequest request) {
+        return ResponseEntity.ok(ApiResponse.success("Tool updated", toolService.updateTool(toolId, request)));
+    }
+
+    @PatchMapping("/add/{toolId}/stock")
+    public ResponseEntity<ApiResponse<?>> addStock(@PathVariable Long toolId, @RequestBody AddStockRequest request) {
+        return ResponseEntity.ok(ApiResponse.success("Stock updated", toolService.addStock(toolId, request)));
     }
 }

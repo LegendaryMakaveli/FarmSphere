@@ -40,18 +40,29 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // admin Public endpoints - no token needed
                         .requestMatchers("/admin/farmers/pending").permitAll()
                         .requestMatchers("/admin/investors/pending").permitAll()
                         .requestMatchers("/admin/farmers/{farmerId}/approve").permitAll()
                         .requestMatchers("/admin/farmers/{farmerId}/reject").permitAll()
                         .requestMatchers("/admin/investors/{investorId}/approve").permitAll()
                         .requestMatchers("/admin/investors/{investorId}/reject").permitAll()
-                        // auth Public endpoints - no token needed
+                        .requestMatchers("/admin/tools/create-tool").permitAll()
+                        .requestMatchers("/admin/tools/get-all-tools").permitAll()
+                        .requestMatchers("/admin/tools/get-all-bookings").permitAll()
+                        .requestMatchers("/admin/tools/bookings/pending").permitAll()
+                        .requestMatchers("/admin/tools/bookings/{bookingId}/approve").permitAll()
+                        .requestMatchers("/admin/tools/bookings/{bookingId}/reject").permitAll()
+                        .requestMatchers("/admin/tools/bookings/{bookingId}/pickup").permitAll()
+                        .requestMatchers("/admin/tools/bookings/{bookingId}/return").permitAll()
+                        .requestMatchers("/admin/tools/get-tool/{toolId}").permitAll()
+                        .requestMatchers("/admin/tools/update-tool/{toolId}").permitAll()
+                        .requestMatchers("/admin/tools/add/{toolId}/stock").permitAll()
+                        .requestMatchers("/farmers/tools/get/availableTools").permitAll()
+                        .requestMatchers("/farmers/tools/bookings").permitAll()
+                        .requestMatchers("/farmers/tools/view/bookings").permitAll()
                         .requestMatchers("/auth/register").permitAll()
                         .requestMatchers("/auth/profile/status").permitAll()
                         .requestMatchers("/auth/reset-password").permitAll()
-                        // Protected endpoints - token required
                         .requestMatchers("/auth/login").authenticated()
                         .requestMatchers("/auth/upgrade/farmer").authenticated()
                         .requestMatchers("/auth/upgrade/investor").authenticated()
