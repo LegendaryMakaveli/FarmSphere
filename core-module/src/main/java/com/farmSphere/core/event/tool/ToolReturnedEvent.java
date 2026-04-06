@@ -1,20 +1,20 @@
 package com.farmSphere.core.event.tool;
 
-public class ToolPickedUpEvent {
+public class ToolReturnedEvent {
     private final Long bookingId;
     private final Long toolId;
     private final String toolName;
-    private final int remainingQuantity;
+    private final int restoredQuantity;
 
-    public ToolPickedUpEvent(Long bookingId, Long toolId,
-                             String toolName, int remainingQuantity) {
+    public ToolReturnedEvent(Long bookingId, Long toolId,
+                             String toolName, int restoredQuantity) {
         this.bookingId = bookingId;
         this.toolId = toolId;
         this.toolName = toolName;
-        this.remainingQuantity = remainingQuantity;
+        this.restoredQuantity = restoredQuantity;
     }
     public Long getBookingId() { return bookingId; }
     public Long getToolId() { return toolId; }
     public String getToolName() { return toolName; }
-    public int getRemainingQuantity() { return remainingQuantity; }
+    public int getRestoredQuantity() { return restoredQuantity; }
 }

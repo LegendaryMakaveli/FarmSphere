@@ -28,11 +28,14 @@ public class JwtService {
         return Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String generateToken(Long userId, String email, String role) {
+    public String generateToken(Long userId, String email, String role,String firstName, String lastName, String phone) {
         return Jwts.builder()
                 .setSubject(email)
                 .claim("role", role)
                 .claim("userId", userId)
+                .claim("firstName", firstName)
+                .claim("lastName", lastName)
+                .claim("phone", phone)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
@@ -50,6 +53,12 @@ public class JwtService {
     public Long extractUserId(String token) {
         return extractClaim(token, claims -> claims.get("userId", Long.class));
     }
+
+    public String extractFirstName(String token) {return extractClaim(token, claims -> claims.get("firstName", String.class));}
+
+    public String extractLastName(String token) {return extractClaim(token, claims -> claims.get("lastName", String.class));}
+
+    public String extractPhone(String token) {return extractClaim(token, claims -> claims.get("phone", String.class));}
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         return claimsResolver.apply(extractAllClaims(token));

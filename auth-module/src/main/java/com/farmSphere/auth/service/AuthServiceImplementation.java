@@ -50,7 +50,7 @@ public class AuthServiceImplementation implements AuthService {
 
         User savedUser = userRepository.save(user);
 
-        String token = jwtService.generateToken(user.getId(), user.getEmail(), user.getRole().name());
+        String token = jwtService.generateToken(user.getId(), user.getEmail(), user.getRole().name(), user.getFirstName(), user.getSecondName(), user.getPhoneNumber());
 
         eventPublisher.publish(new UserRegisteredEvent(
                 savedUser.getId(),
@@ -89,7 +89,7 @@ public class AuthServiceImplementation implements AuthService {
         user.setLastLogin(LocalDateTime.now());
         userRepository.save(user);
 
-        String token = jwtService.generateToken(user.getId(), user.getEmail(), user.getRole().name());
+        String token = jwtService.generateToken(user.getId(), user.getEmail(), user.getRole().name(), user.getFirstName(), user.getSecondName(), user.getPhoneNumber());
 
         eventPublisher.publish(new UserLogginEvent(
                 user.getId(),
@@ -104,6 +104,9 @@ public class AuthServiceImplementation implements AuthService {
                 .role(user.getRole())
                 .email(user.getEmail())
                 .userId(user.getId())
+                .firstName(user.getFirstName())
+                .secondName(user.getSecondName())
+                .phoneNumber(user.getPhoneNumber())
                 .lastLogin(user.getLastLogin() != null ? FORMATTER.format(user.getLastLogin()) : null)
                 .profileStatus(UserProfileStatus.builder()
                         .isFarmer(isFarmer)

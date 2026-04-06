@@ -1,25 +1,24 @@
 package com.farmSphere.core.event.tool;
 
-import java.time.LocalDateTime;
-
-public class ToolBookingApprovedEvent {
+public class ToolBookingRejectedEvent {
     private final Long bookingId;
     private final Long farmerId;
     private final String farmerEmail;
     private final String toolName;
-    private final LocalDateTime startDate;
+    private final String reason;
 
-    public ToolBookingApprovedEvent(Long bookingId, Long farmerId, String farmerEmail, String toolName, LocalDateTime startDate) {
+    public ToolBookingRejectedEvent(Long bookingId, Long farmerId,
+                                    String farmerEmail, String toolName,
+                                    String reason) {
         this.bookingId = bookingId;
         this.farmerId = farmerId;
         this.farmerEmail = farmerEmail;
         this.toolName = toolName;
-        this.startDate = startDate;
+        this.reason = reason;
     }
-
     public Long getBookingId() { return bookingId; }
     public Long getFarmerId() { return farmerId; }
     public String getFarmerEmail() { return farmerEmail; }
     public String getToolName() { return toolName; }
-    public LocalDateTime getStartDate() { return startDate; }
+    public String getReason() { return reason; }
 }

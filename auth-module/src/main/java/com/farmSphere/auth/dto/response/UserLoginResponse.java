@@ -14,6 +14,9 @@ public class UserLoginResponse {
     private ROLE role;
     private String email;
     private Long userId;
+    private String firstName;
+    private String secondName;
+    private String phoneNumber;
     private String lastLogin;
     private UserProfileStatus profileStatus;
 }

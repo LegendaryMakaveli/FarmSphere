@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -42,12 +44,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             UserDetails userDetails = userDetailsService.loadUserByUsername(email);
             if (jwtService.isTokenValid(token, email)) {
 
-                Long userId = jwtService.extractUserId(token);
-                String role = jwtService.extractRole(token);
+                Map<String, Object> details = new HashMap<>();
+                details.put("userId",    jwtService.extractUserId(token));
+                details.put("firstName", jwtService.extractFirstName(token));
+                details.put("lastName",  jwtService.extractLastName(token));
+                details.put("phone",     jwtService.extractPhone(token));
+                details.put("role",      jwtService.extractRole(token));
 
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                auth.setDetails(userId);
-                auth.setDetails(role);
+                auth.setDetails(details);
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
         }

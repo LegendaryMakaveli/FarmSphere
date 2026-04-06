@@ -21,11 +21,13 @@ import java.time.LocalDateTime;
 @EntityScan(basePackages = {
         "com.farmSphere.auth.data.model",
         "com.farmSphere.estate.data.model",
+        "com.farmSphere.tool.data.model",
         "com.farmSphere.core"
 })
 @EnableJpaRepositories(basePackages = {
         "com.farmSphere.auth.data.repository",
         "com.farmSphere.estate.data.repository",
+        "com.farmSphere.tool.data.repository",
         "com.farmSphere.core",
 })
 public class FarmSphereApplication {
