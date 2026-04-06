@@ -57,9 +57,21 @@ public class SecurityConfig {
                         .requestMatchers("/admin/tools/get-tool/{toolId}").permitAll()
                         .requestMatchers("/admin/tools/update-tool/{toolId}").permitAll()
                         .requestMatchers("/admin/tools/add/{toolId}/stock").permitAll()
+                        .requestMatchers("/public/produce/available-produce").permitAll()
+                        .requestMatchers("/public/produce/get-produce/{produceId}").permitAll()
+                        .requestMatchers("/public/produce/category/{category}").permitAll()
                         .requestMatchers("/farmers/tools/get/availableTools").permitAll()
                         .requestMatchers("/farmers/tools/bookings").permitAll()
                         .requestMatchers("/farmers/tools/view/bookings").permitAll()
+                        .requestMatchers("/farmers/produce/list-produce").permitAll()
+                        .requestMatchers("/farmers/produce/get-my-listing").permitAll()
+                        .requestMatchers("/farmers/produce/update/produce{produceId}").permitAll()
+                        .requestMatchers("/farmers/produce/delete-produce/{produceId}").permitAll()
+
+
+
+
+
                         .requestMatchers("/auth/register").permitAll()
                         .requestMatchers("/auth/profile/status").permitAll()
                         .requestMatchers("/auth/reset-password").permitAll()
