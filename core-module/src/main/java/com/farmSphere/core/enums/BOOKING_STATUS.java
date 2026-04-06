@@ -4,6 +4,6 @@ public enum BOOKING_STATUS {
     PENDING,
     APPROVED,
     REJECTED,
-    CANCELLED,
+    RETURNED,
     IN_USE
 }
