@@ -1,9 +1,14 @@
 package com.farmSphere.marketplace.data.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
+
+@Setter
+@Getter
 public class OrderItem {
     @jakarta.persistence.Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
