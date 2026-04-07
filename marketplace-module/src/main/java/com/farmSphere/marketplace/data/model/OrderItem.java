@@ -7,6 +7,7 @@ import lombok.Setter;
 import java.math.BigDecimal;
 
 
+@Entity
 @Setter
 @Getter
 public class OrderItem {

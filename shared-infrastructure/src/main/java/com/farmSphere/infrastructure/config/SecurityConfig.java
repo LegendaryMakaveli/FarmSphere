@@ -57,6 +57,15 @@ public class SecurityConfig {
                         .requestMatchers("/admin/tools/get-tool/{toolId}").permitAll()
                         .requestMatchers("/admin/tools/update-tool/{toolId}").permitAll()
                         .requestMatchers("/admin/tools/add/{toolId}/stock").permitAll()
+                        .requestMatchers("/admin/orders/get-all").permitAll()
+                        .requestMatchers("/admin/orders/pending").permitAll()
+                        .requestMatchers("/admin/orders/matched").permitAll()
+                        .requestMatchers("/admin/orders/{orderId}/match").permitAll()
+                        .requestMatchers("/admin/orders/{orderId}/confirm-sale").permitAll()
+                        .requestMatchers("/orders/place-order").permitAll()
+                        .requestMatchers("/orders/get-order").permitAll()
+                        .requestMatchers("/orders/get-single-order/{orderId}").permitAll()
+                        .requestMatchers("/orders/cancle-order{orderId}").permitAll()
                         .requestMatchers("/public/produce/available-produce").permitAll()
                         .requestMatchers("/public/produce/get-produce/{produceId}").permitAll()
                         .requestMatchers("/public/produce/category/{category}").permitAll()
@@ -67,11 +76,6 @@ public class SecurityConfig {
                         .requestMatchers("/farmers/produce/get-my-listing").permitAll()
                         .requestMatchers("/farmers/produce/update/produce{produceId}").permitAll()
                         .requestMatchers("/farmers/produce/delete-produce/{produceId}").permitAll()
-
-
-
-
-
                         .requestMatchers("/auth/register").permitAll()
                         .requestMatchers("/auth/profile/status").permitAll()
                         .requestMatchers("/auth/reset-password").permitAll()
