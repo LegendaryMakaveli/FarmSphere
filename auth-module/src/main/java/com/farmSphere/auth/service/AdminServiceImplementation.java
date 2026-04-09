@@ -11,6 +11,7 @@ import com.farmSphere.core.event.auth.InvestorApprovedEvent;
 import com.farmSphere.core.event.auth.InvestorRejectedEvent;
 import com.farmSphere.infrastructure.eventbus.DomainEventPublisher;
 import com.farmSphere.infrastructure.exception.DomainException;
+import com.farmSphere.infrastructure.security.SecurityUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,17 +28,20 @@ public class AdminServiceImplementation implements AdminService{
 
     @Override
     public List<Farmer> getPendingFarmers() {
+        SecurityUtils.requireAdmin();
         return farmerRepository.findAllByRegistrationStatus(REGISTRATION_STATUS.SUBMITTED);
     }
 
     @Override
     public List<Investor> getPendingInvestors() {
+        SecurityUtils.requireAdmin();
         return investorRepository.findAllByRegistrationStatus(REGISTRATION_STATUS.SUBMITTED);
     }
 
     @Transactional
     @Override
     public void approveFarmer(Long farmerId) {
+        SecurityUtils.requireAdmin();
         Farmer farmer = farmerRepository.findById(farmerId).orElseThrow(() -> new DomainException("Farmer not found", 404));
         if (farmer.getRegistrationStatus() == REGISTRATION_STATUS.APPROVED) throw new DomainException("Farmer is already approved", 409);
 
@@ -54,6 +58,7 @@ public class AdminServiceImplementation implements AdminService{
     @Transactional
     @Override
     public void rejectFarmer(Long farmerId, String reason) {
+        SecurityUtils.requireAdmin();
         Farmer farmer = farmerRepository.findById(farmerId).orElseThrow(() -> new DomainException("Farmer not found", 404));
 
         farmer.setRegistrationStatus(REGISTRATION_STATUS.REJECTED);
@@ -70,6 +75,7 @@ public class AdminServiceImplementation implements AdminService{
     @Transactional
     @Override
     public void approveInvestor(Long investorId) {
+        SecurityUtils.requireAdmin();
         Investor investor = investorRepository.findById(investorId).orElseThrow(() -> new DomainException("Investor not found", 404));
         if (investor.getRegistrationStatus() == REGISTRATION_STATUS.APPROVED) throw new DomainException("Investor is already approved", 409);
 
@@ -86,6 +92,7 @@ public class AdminServiceImplementation implements AdminService{
     @Transactional
     @Override
     public void rejectInvestor(Long investorId, String reason) {
+        SecurityUtils.requireAdmin();
         Investor investor = investorRepository.findById(investorId). orElseThrow(() -> new DomainException("Investor not found", 404));
 
         investor.setRegistrationStatus(REGISTRATION_STATUS.REJECTED);

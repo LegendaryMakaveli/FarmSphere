@@ -9,6 +9,7 @@ import com.farmSphere.tool.dto.request.RejectBookingRequest;
 import com.farmSphere.tool.dto.request.UpdateToolRequest;
 import com.farmSphere.tool.service.ToolBookingService;
 import com.farmSphere.tool.service.ToolService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -52,7 +53,7 @@ public class AdminToolController {
     }
 
     @PatchMapping("/bookings/{bookingId}/reject")
-    public ResponseEntity<ApiResponse<?>> rejectBooking(@PathVariable Long bookingId, @RequestBody RejectBookingRequest request) {
+    public ResponseEntity<ApiResponse<?>> rejectBooking(@PathVariable Long bookingId, @RequestBody @Valid RejectBookingRequest request) {
         Long adminId = SecurityUtils.getCurrentUserId();
         return ResponseEntity.ok(ApiResponse.success("Booking rejected", bookingService.rejectBooking(bookingId, adminId, request.getReason())));
     }
@@ -73,12 +74,12 @@ public class AdminToolController {
     }
 
     @PatchMapping("/update-tool/{toolId}")
-    public ResponseEntity<ApiResponse<?>> updateTool(@PathVariable Long toolId, @RequestBody UpdateToolRequest request) {
+    public ResponseEntity<ApiResponse<?>> updateTool(@PathVariable Long toolId, @RequestBody @Valid UpdateToolRequest request) {
         return ResponseEntity.ok(ApiResponse.success("Tool updated", toolService.updateTool(toolId, request)));
     }
 
     @PatchMapping("/add/{toolId}/stock")
-    public ResponseEntity<ApiResponse<?>> addStock(@PathVariable Long toolId, @RequestBody AddStockRequest request) {
+    public ResponseEntity<ApiResponse<?>> addStock(@PathVariable Long toolId, @RequestBody @Valid AddStockRequest request) {
         return ResponseEntity.ok(ApiResponse.success("Stock updated", toolService.addStock(toolId, request)));
     }
 }

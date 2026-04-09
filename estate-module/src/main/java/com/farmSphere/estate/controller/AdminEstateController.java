@@ -7,6 +7,7 @@ import com.farmSphere.estate.dto.request.CreatePlotRequest;
 import com.farmSphere.estate.service.EstateService;
 import com.farmSphere.estate.service.PlotService;
 import com.farmSphere.infrastructure.response.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,7 +23,7 @@ public class AdminEstateController {
     private final PlotService plotService;
 
     @PostMapping("/estates")
-    public ResponseEntity<ApiResponse<?>> createEstate(@RequestBody CreateEstateRequest request) {
+    public ResponseEntity<ApiResponse<?>> createEstate(@RequestBody @Valid CreateEstateRequest request) {
         return ResponseEntity.status(201).body(ApiResponse.success("Estate created", estateService.createEstate(request)));
     }
 
@@ -33,8 +34,7 @@ public class AdminEstateController {
     }
 
     @PostMapping("/clusters")
-    public ResponseEntity<ApiResponse<?>> createCluster(
-            @RequestBody CreateClusterRequest request) {
+    public ResponseEntity<ApiResponse<?>> createCluster(@RequestBody @Valid CreateClusterRequest request) {
         return ResponseEntity.status(201).body(ApiResponse.success("Cluster created", estateService.createCluster(request)));
     }
 
@@ -45,8 +45,7 @@ public class AdminEstateController {
     }
 
     @PostMapping("/plots")
-    public ResponseEntity<ApiResponse<?>> createPlot(
-            @RequestBody CreatePlotRequest request) {
+    public ResponseEntity<ApiResponse<?>> createPlot(@RequestBody @Valid CreatePlotRequest request) {
         return ResponseEntity.status(201).body(ApiResponse.success("Plot created", plotService.createPlot(request)));
     }
 
@@ -63,9 +62,7 @@ public class AdminEstateController {
     }
 
     @PatchMapping("/plots/{plotId}/assign")
-    public ResponseEntity<ApiResponse<?>> assignPlot(
-            @PathVariable Long plotId,
-            @RequestBody AssignPlotRequest request) {
+    public ResponseEntity<ApiResponse<?>> assignPlot(@PathVariable Long plotId, @RequestBody @Valid AssignPlotRequest request) {
         return ResponseEntity.ok(
                 ApiResponse.success("Plot assigned successfully", plotService.assignPlot(plotId, request)));
     }

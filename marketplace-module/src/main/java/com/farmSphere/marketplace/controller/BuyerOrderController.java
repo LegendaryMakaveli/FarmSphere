@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/orders")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('BUYER') or hasRole('FARMER') or hasRole('INVESTOR')")
+@PreAuthorize("hasRole('USER') or hasRole('FARMER') or hasRole('INVESTOR')")
 public class BuyerOrderController {
 
     private final OrderService orderService;
@@ -43,7 +43,7 @@ public class BuyerOrderController {
         return ResponseEntity.ok(ApiResponse.success("Order detail", orderService.getOrderById(orderId, buyerId)));
     }
 
-    @PatchMapping("/cancle-order{orderId}")
+    @PatchMapping("/cancel-order{orderId}")
     public ResponseEntity<ApiResponse<?>> cancelOrder(@PathVariable Long orderId, @RequestBody @Valid CancelOrderRequest request) {
         Long buyerId = SecurityUtils.getCurrentUserId();
 

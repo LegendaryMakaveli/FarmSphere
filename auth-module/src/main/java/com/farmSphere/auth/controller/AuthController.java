@@ -10,6 +10,7 @@ import com.farmSphere.auth.dto.response.UserRegisterResponse;
 import com.farmSphere.auth.service.AuthService;
 import com.farmSphere.infrastructure.response.ApiResponse;
 import com.farmSphere.infrastructure.security.SecurityUtils;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<UserRegisterResponse>> register(@RequestBody UserRegisterRequest request) {
+    public ResponseEntity<ApiResponse<UserRegisterResponse>> register(@RequestBody @Valid UserRegisterRequest request) {
         UserRegisterResponse response = authService.register(request);
 
         return ResponseEntity
@@ -32,7 +33,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<UserLoginResponse>> login(@RequestBody UserLoginRequest request) {
+    public ResponseEntity<ApiResponse<UserLoginResponse>> login(@RequestBody @Valid UserLoginRequest request) {
         UserLoginResponse response = authService.login(request);
 
         return ResponseEntity
@@ -41,7 +42,7 @@ public class AuthController {
 
 
     @PostMapping("/upgrade/farmer")
-    public ResponseEntity<ApiResponse<UserProfileStatus>> upgradeToFarmer(@RequestBody UpgradeToFarmerRequest request) {
+    public ResponseEntity<ApiResponse<UserProfileStatus>> upgradeToFarmer(@RequestBody @Valid UpgradeToFarmerRequest request) {
         Long userId = SecurityUtils.getCurrentUserId();
         String email = SecurityUtils.getCurrentUserEmail();
 
@@ -75,7 +76,7 @@ public class AuthController {
     }
 
     @PatchMapping("/reset-password")
-    public ResponseEntity<ApiResponse<Void>> resetPassword(@RequestBody PasswordResetRequest request) {
+    public ResponseEntity<ApiResponse<Void>> resetPassword(@RequestBody @Valid PasswordResetRequest request) {
         authService.resetPassword(request);
 
         return ResponseEntity

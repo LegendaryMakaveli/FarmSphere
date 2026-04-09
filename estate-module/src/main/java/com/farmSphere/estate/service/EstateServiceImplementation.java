@@ -12,6 +12,7 @@ import com.farmSphere.estate.dto.response.EstateResponse;
 import com.farmSphere.estate.util.Mapper;
 import com.farmSphere.infrastructure.eventbus.DomainEventPublisher;
 import com.farmSphere.infrastructure.exception.DomainException;
+import com.farmSphere.infrastructure.security.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,7 @@ public class EstateServiceImplementation implements EstateService{
 
     @Override
     public EstateResponse createEstate(CreateEstateRequest request) {
+        SecurityUtils.requireAdmin();
       estateRepository.findByName(request.getName()).ifPresent(e -> {throw new DomainException("Estate already exists!", 409);});
       FarmEstate estate = Mapper.maptToCreateFarmEstate(request);
       estateRepository.save(estate);
@@ -45,6 +47,7 @@ public class EstateServiceImplementation implements EstateService{
 
     @Override
     public ClusterResponse createCluster(CreateClusterRequest request) {
+        SecurityUtils.requireAdmin();
         clusterRepository.findById(request.getEstateId()).ifPresent(c -> {throw new DomainException("Cluster already exists for this estate!", 409);});
         Cluster cluster = mapToCreateCluster(request);
         clusterRepository.save(cluster);
@@ -58,11 +61,13 @@ public class EstateServiceImplementation implements EstateService{
 
     @Override
     public List<FarmEstate> getAllEstates() {
+        SecurityUtils.requireAdmin();
         return estateRepository.findAll();
     }
 
     @Override
     public List<Cluster> getClustersByEstate(Long estateId) {
+        SecurityUtils.requireAdmin();
         return clusterRepository.findByEstateId(estateId);
     }
 }

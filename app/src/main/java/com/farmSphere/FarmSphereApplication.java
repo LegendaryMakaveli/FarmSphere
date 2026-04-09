@@ -23,6 +23,7 @@ import java.time.LocalDateTime;
         "com.farmSphere.estate.data.model",
         "com.farmSphere.tool.data.model",
         "com.farmSphere.marketplace.data.model",
+        "com.farmSphere.investment.data.model",
         "com.farmSphere.core"
 })
 @EnableJpaRepositories(basePackages = {
@@ -30,6 +31,7 @@ import java.time.LocalDateTime;
         "com.farmSphere.estate.data.repository",
         "com.farmSphere.tool.data.repository",
         "com.farmSphere.marketplace.data.repository",
+        "com.farmSphere.investment.data.repository",
         "com.farmSphere.core",
 })
 public class FarmSphereApplication {

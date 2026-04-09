@@ -12,6 +12,5 @@ import java.util.List;
 @Getter
 public class PlaceOrderRequest {
     @NotEmpty(message = "Order must have at least one item")
-    @Valid
     private List<OrderItemRequest> items;
 }

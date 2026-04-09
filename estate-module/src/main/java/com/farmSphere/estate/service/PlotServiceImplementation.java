@@ -11,6 +11,7 @@ import com.farmSphere.estate.dto.request.CreatePlotRequest;
 import com.farmSphere.estate.dto.response.PlotResponse;
 import com.farmSphere.infrastructure.eventbus.DomainEventPublisher;
 import com.farmSphere.infrastructure.exception.DomainException;
+import com.farmSphere.infrastructure.security.SecurityUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,7 @@ public class PlotServiceImplementation implements PlotService{
 
     @Override
     public PlotResponse createPlot(CreatePlotRequest request) {
+        SecurityUtils.requireAdmin();
         clusterRepository.findById(request.getClusterId()). orElseThrow(() -> new DomainException("Cluster not found", 404));
         Plot plot = mapToCreatePlot(request);
 
@@ -40,6 +42,7 @@ public class PlotServiceImplementation implements PlotService{
     @Transactional
     @Override
     public PlotResponse assignPlot(Long plotId, AssignPlotRequest request) {
+        SecurityUtils.requireAdmin();
         Plot plot = plotRepository.findById(plotId).orElseThrow(() -> new DomainException("Plot not found", 404));
         if(plot.getStatus() != PLOT_STATUS.AVAILABLE) throw new DomainException("Plot is already assigned", 400);
         if (plotRepository.existsByAssignedFarmerId(request.getFarmerId())) throw new DomainException("Farmer already has an assigned plot", 409);
@@ -65,6 +68,7 @@ public class PlotServiceImplementation implements PlotService{
     @Transactional
     @Override
     public PlotResponse unassignPlot(Long plotId) {
+        SecurityUtils.requireAdmin();
         Plot plot = plotRepository.findById(plotId).orElseThrow(() -> new DomainException("Plot not found", 404));
         if (plot.getStatus() != PLOT_STATUS.ASSIGNED) throw new DomainException("Plot is not currently assigned", 400);
         Long previousFarmerId = plot.getAssignedFarmerId();
@@ -85,6 +89,7 @@ public class PlotServiceImplementation implements PlotService{
 
     @Override
     public List<PlotResponse> getAvailablePlots() {
+        SecurityUtils.requireAdmin();
         return plotRepository.findAllByStatus(PLOT_STATUS.AVAILABLE)
                 .stream()
                 .map(PlotResponse::from)
@@ -93,6 +98,7 @@ public class PlotServiceImplementation implements PlotService{
 
     @Override
     public List<PlotResponse> getAllPlots() {
+        SecurityUtils.requireAdmin();
         return plotRepository.findAll()
                 .stream()
                 .map(PlotResponse::from)
@@ -101,6 +107,7 @@ public class PlotServiceImplementation implements PlotService{
 
     @Override
     public PlotResponse getMyPlot(Long farmerId) {
+        SecurityUtils.requireFarmer();
         Plot plot = plotRepository.findByAssignedFarmerId(farmerId).orElseThrow(() -> new DomainException("No plot assigned to you yet", 404));
         return PlotResponse.from(plot);
     }

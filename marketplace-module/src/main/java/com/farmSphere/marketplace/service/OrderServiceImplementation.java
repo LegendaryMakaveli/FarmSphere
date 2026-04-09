@@ -6,6 +6,7 @@ import com.farmSphere.core.enums.PRODUCE_STATUS;
 import com.farmSphere.core.event.marketplace.*;
 import com.farmSphere.infrastructure.eventbus.DomainEventPublisher;
 import com.farmSphere.infrastructure.exception.DomainException;
+import com.farmSphere.infrastructure.security.SecurityUtils;
 import com.farmSphere.marketplace.data.model.Order;
 import com.farmSphere.marketplace.data.model.OrderItem;
 import com.farmSphere.marketplace.data.model.Produce;
@@ -45,6 +46,7 @@ public class OrderServiceImplementation implements OrderService{
     @Transactional
     @Override
     public OrderResponse placeOrder(Long buyerId, String buyerEmail, String buyerName, String buyerPhone, PlaceOrderRequest request) {
+        SecurityUtils.requireUser();
         BigDecimal totalAmount = BigDecimal.ZERO;
         List<Produce> produceList = new ArrayList<>();
         for (OrderItemRequest itemReq : request.getItems()) {
@@ -92,6 +94,7 @@ public class OrderServiceImplementation implements OrderService{
     @Transactional
     @Override
     public OrderResponse cancelOrder(Long orderId, Long buyerId, CancelOrderRequest request) {
+        SecurityUtils.requireUser();
         Order order = orderRepository.findByOrderIdAndBuyerId(orderId, buyerId).orElseThrow(() -> new DomainException("Order not found", 404));
         if (order.getStatus() != ORDER_STATUS.PENDING) throw new DomainException("Only pending orders can be cancelled", 400);
 
@@ -119,6 +122,7 @@ public class OrderServiceImplementation implements OrderService{
     @Transactional
     @Override
     public OrderResponse matchOrder(Long orderId, Long adminId) {
+        SecurityUtils.requireAdmin();
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new DomainException("Order not found", 404));
 
         if (order.getStatus() != ORDER_STATUS.PENDING) throw new DomainException("Only pending orders can be matched", 400);
@@ -156,6 +160,7 @@ public class OrderServiceImplementation implements OrderService{
     @Transactional
     @Override
     public OrderResponse confirmSale(Long orderId, Long adminId, ConfirmSaleRequest request) {
+        SecurityUtils.requireAdmin();
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new DomainException("Order not found", 404));
 
         if (order.getStatus() != ORDER_STATUS.MATCHED) throw new DomainException("Only matched orders can be confirmed", 400);
@@ -189,6 +194,7 @@ public class OrderServiceImplementation implements OrderService{
 
     @Override
     public List<OrderResponse> getMyOrders(Long buyerId) {
+        SecurityUtils.requireUser();
         return orderRepository.findAllByBuyerId(buyerId)
                 .stream()
                 .map(OrderResponse::from)
@@ -197,6 +203,7 @@ public class OrderServiceImplementation implements OrderService{
 
     @Override
     public OrderResponse getOrderById(Long orderId, Long buyerId) {
+        SecurityUtils.requireUser();
         return orderRepository.findByOrderIdAndBuyerId(orderId, buyerId)
                 .map(OrderResponse::from)
                 .orElseThrow(() -> new DomainException("Order not found", 404));
@@ -204,6 +211,7 @@ public class OrderServiceImplementation implements OrderService{
 
     @Override
     public List<OrderResponse> getOrdersByStatus(ORDER_STATUS status) {
+        SecurityUtils.requireAdmin();
         return orderRepository.findAllByStatus(status)
                 .stream()
                 .map(OrderResponse::from)
@@ -212,6 +220,7 @@ public class OrderServiceImplementation implements OrderService{
 
     @Override
     public List<OrderResponse> getAllOrders() {
+        SecurityUtils.requireAdmin();
         return orderRepository.findAll()
                 .stream()
                 .map(OrderResponse::from)

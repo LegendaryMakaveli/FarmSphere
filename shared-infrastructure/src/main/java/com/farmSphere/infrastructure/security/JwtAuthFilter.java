@@ -38,23 +38,32 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
 
         String token = authHeader.substring(7);
-        String email = jwtService.extractEmail(token);
+        try {
+            String email = jwtService.extractEmail(token);
 
-        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-            if (jwtService.isTokenValid(token, email)) {
+            if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
-                Map<String, Object> details = new HashMap<>();
-                details.put("userId",    jwtService.extractUserId(token));
-                details.put("firstName", jwtService.extractFirstName(token));
-                details.put("lastName",  jwtService.extractLastName(token));
-                details.put("phone",     jwtService.extractPhone(token));
-                details.put("role",      jwtService.extractRole(token));
+                if (jwtService.isTokenValid(token, email)) {
+                    Map<String, Object> details = new HashMap<>();
+                    details.put("userId",    jwtService.extractUserId(token));
+                    details.put("firstName", jwtService.extractFirstName(token));
+                    details.put("lastName",  jwtService.extractLastName(token));
+                    details.put("phone",     jwtService.extractPhone(token));
+                    details.put("roles",      jwtService.extractRoles(token));
 
-                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                auth.setDetails(details);
-                SecurityContextHolder.getContext().setAuthentication(auth);
+                    UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    auth.setDetails(details);
+                    SecurityContextHolder.getContext().setAuthentication(auth);
+                }
             }
+        } catch (Exception e) {
+            SecurityContextHolder.clearContext();
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"success\":false,\"message\":\"Invalid or expired token\",\"data\":null}"
+            );
+            return;
         }
 
         filterChain.doFilter(request, response);

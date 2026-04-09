@@ -1,9 +1,12 @@
 package com.farmSphere.infrastructure.security;
 
+import com.farmSphere.infrastructure.exception.DomainException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class SecurityUtils {
 
@@ -19,20 +22,12 @@ public class SecurityUtils {
         return (Long) getDetails().get("userId");
     }
 
-    public static String getCurrentUserRole() {
-        return SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getAuthorities()
-                .iterator()
-                .next()
-                .getAuthority();
-    }
+    @SuppressWarnings("unchecked")
+    public static Set<String> getCurrentUserRoles() {return (Set<String>) getDetails().get("roles");}
 
-    public static String getCurrentUserEmail() {
-        return SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getName();
-    }
+    public static boolean hasRole(String role) {return getCurrentUserRoles().contains(role);}
+
+    public static String getCurrentUserEmail() {return SecurityContextHolder.getContext().getAuthentication().getName();}
 
     public static String getCurrentUserFirstName() {
         return (String) getDetails().get("firstName");
@@ -45,4 +40,22 @@ public class SecurityUtils {
     public static String getCurrentUserPhone() {
         return (String) getDetails().get("phone");
     }
+
+
+    public static boolean isUser() {return hasRole("USER");}
+
+    public static boolean isFarmer() {return hasRole("FARMER");}
+
+    public static boolean isInvestor() {return hasRole("INVESTOR");}
+
+    public static boolean isAdmin() {return hasRole("ADMIN");}
+
+
+    public static void requireRole(String role) {
+        if (!hasRole(role)) throw new DomainException("Access denied — requires " + role + " role", 403);}
+
+    public static void requireFarmer() { requireRole("FARMER"); }
+    public static void requireInvestor() { requireRole("INVESTOR"); }
+    public static void requireAdmin() { requireRole("ADMIN"); }
+    public static void requireUser() { requireRole("BUYER"); }
 }

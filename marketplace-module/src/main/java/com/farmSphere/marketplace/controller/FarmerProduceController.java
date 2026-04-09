@@ -5,6 +5,7 @@ import com.farmSphere.infrastructure.security.SecurityUtils;
 import com.farmSphere.marketplace.dto.request.ListProduceRequest;
 import com.farmSphere.marketplace.dto.request.UpdateProduceRequest;
 import com.farmSphere.marketplace.service.ProduceService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,7 +20,7 @@ public class FarmerProduceController {
     private final ProduceService produceService;
 
     @PostMapping("/list-produce")
-    public ResponseEntity<ApiResponse<?>> listProduce(@RequestBody ListProduceRequest request) {
+    public ResponseEntity<ApiResponse<?>> listProduce(@RequestBody @Valid ListProduceRequest request) {
         Long farmerId     = SecurityUtils.getCurrentUserId();
         String farmerName = SecurityUtils.getCurrentUserFirstName()
                 + " " + SecurityUtils.getCurrentUserLastName();
@@ -35,7 +36,7 @@ public class FarmerProduceController {
     }
 
     @PatchMapping("/update/produce{produceId}")
-    public ResponseEntity<ApiResponse<?>> updateProduce(@PathVariable Long produceId, @RequestBody UpdateProduceRequest request) {
+    public ResponseEntity<ApiResponse<?>> updateProduce(@PathVariable Long produceId, @RequestBody @Valid UpdateProduceRequest request) {
         Long farmerId = SecurityUtils.getCurrentUserId();
         return ResponseEntity.ok(ApiResponse.success("Produce updated", produceService.updateProduce(produceId, farmerId, request)));
     }

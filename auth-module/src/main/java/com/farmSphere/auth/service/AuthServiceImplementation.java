@@ -1,9 +1,6 @@
 package com.farmSphere.auth.service;
 
-import com.farmSphere.auth.data.model.Farmer;
-import com.farmSphere.auth.data.model.Investor;
-import com.farmSphere.auth.data.model.User;
-import com.farmSphere.auth.data.model.UserProfileStatus;
+import com.farmSphere.auth.data.model.*;
 import com.farmSphere.auth.data.repository.FarmerRepository;
 import com.farmSphere.auth.data.repository.InvestorRepository;
 import com.farmSphere.auth.data.repository.UserRepository;
@@ -20,11 +17,14 @@ import com.farmSphere.core.event.auth.*;
 import com.farmSphere.infrastructure.eventbus.DomainEventPublisher;
 import com.farmSphere.infrastructure.exception.DomainException;
 import com.farmSphere.infrastructure.security.JwtService;
+import com.farmSphere.infrastructure.security.SecurityUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.stream.Collectors;
+
 import static com.farmSphere.auth.util.Validation.validateRequest;
 import static com.farmSphere.auth.util.Validation.validateResetPasswordRequest;
 
@@ -50,7 +50,7 @@ public class AuthServiceImplementation implements AuthService {
 
         User savedUser = userRepository.save(user);
 
-        String token = jwtService.generateToken(user.getId(), user.getEmail(), user.getRole().name(), user.getFirstName(), user.getSecondName(), user.getPhoneNumber());
+        String token = jwtService.generateToken(user.getId(), user.getEmail(), savedUser.getRoles().stream().map(ROLE::name).collect(Collectors.toSet()), user.getFirstName(), user.getSecondName(), user.getPhoneNumber());
 
         eventPublisher.publish(new UserRegisteredEvent(
                 savedUser.getId(),
@@ -89,19 +89,23 @@ public class AuthServiceImplementation implements AuthService {
         user.setLastLogin(LocalDateTime.now());
         userRepository.save(user);
 
-        String token = jwtService.generateToken(user.getId(), user.getEmail(), user.getRole().name(), user.getFirstName(), user.getSecondName(), user.getPhoneNumber());
+        String token = jwtService.generateToken(user.getId(), user.getEmail(), user.getRoles().stream().map(ROLE::name).collect(Collectors.toSet()), user.getFirstName(), user.getSecondName(), user.getPhoneNumber());
+
+        String rolesAsString = user.getRoles().stream()
+                .map(ROLE::name)
+                .collect(Collectors.joining(","));
 
         eventPublisher.publish(new UserLogginEvent(
                 user.getId(),
                 user.getEmail(),
-                user.getRole().name(),
+                rolesAsString,
                 LocalDateTime.now()
         ));
 
         return UserLoginResponse.builder()
                 .message("Login successful!")
                 .token(token)
-                .role(user.getRole())
+                .roles(user.getRoles().stream().map(ROLE::name).collect(Collectors.toSet()))
                 .email(user.getEmail())
                 .userId(user.getId())
                 .firstName(user.getFirstName())
@@ -116,9 +120,10 @@ public class AuthServiceImplementation implements AuthService {
     }
 
 
-    @Override
     @Transactional
+    @Override
     public UserProfileStatus upgradeToFarmer(Long userId, String email, UpgradeToFarmerRequest request) {
+        SecurityUtils.requireUser();
         if (farmerRepository.existsById(userId)) throw new DomainException("You are already registered as a Farmer", 409);
         User user = userRepository.findById(userId).orElseThrow(() -> new DomainException("User not found", 404));
 
@@ -130,6 +135,9 @@ public class AuthServiceImplementation implements AuthService {
         farmer.setTotalLandSize(request.getTotalLandSize());
         farmerRepository.save(farmer);
 
+        user.getRoles().add(ROLE.FARMER);
+        userRepository.save(user);
+
         eventPublisher.publish(new FarmerRegisteredEvent(
                 userId,
                 user.getFirstName(),
@@ -138,14 +146,16 @@ public class AuthServiceImplementation implements AuthService {
 
         return UserProfileStatus.builder()
                 .isFarmer(true)
+                .farmerStatus(REGISTRATION_STATUS.SUBMITTED)
                 .isInvestor(investorRepository.existsById(userId))
+                .investorStatus(investorRepository.findById(userId).map(Investor::getRegistrationStatus).orElse(null))
                 .build();
     }
 
     @Override
     @Transactional
     public UserProfileStatus upgradeToInvestor(Long userId, String email) {
-
+        SecurityUtils.requireUser();
         if (investorRepository.existsById(userId)) throw new DomainException("You are already registered as an Investor", 409);
         User user = userRepository.findById(userId).orElseThrow(() -> new DomainException("User not found", 404));
 
@@ -153,6 +163,9 @@ public class AuthServiceImplementation implements AuthService {
         investor.setId(user.getId());
         investor.setStartDate(LocalDateTime.now());
         investorRepository.save(investor);
+
+        user.getRoles().add(ROLE.INVESTOR);
+        userRepository.save(user);
 
         eventPublisher.publish(new InvestorRegisteredEvent(
                 userId,
@@ -162,7 +175,9 @@ public class AuthServiceImplementation implements AuthService {
 
         return UserProfileStatus.builder()
                 .isFarmer(farmerRepository.existsById(userId))
+                .farmerStatus(farmerRepository.findById(userId).map(Farmer::getRegistrationStatus).orElse(null))
                 .isInvestor(true)
+                .investorStatus(REGISTRATION_STATUS.SUBMITTED)
                 .build();
     }
 
@@ -200,6 +215,7 @@ public class AuthServiceImplementation implements AuthService {
     public String resetPassword(PasswordResetRequest request) {
         validateResetPasswordRequest(request);
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new DomainException("User not found", 404));
+        if(user.getPassword().equals(PasswordHash.hash(request.getNewPassword()))) throw new DomainException("New password cannot be the same as the old password", 400);
         user.setPassword(PasswordHash.hash(request.getNewPassword()));
 
         userRepository.save(user);

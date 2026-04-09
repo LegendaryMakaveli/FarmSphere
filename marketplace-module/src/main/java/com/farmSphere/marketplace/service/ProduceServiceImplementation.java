@@ -6,6 +6,7 @@ import com.farmSphere.core.enums.PRODUCE_STATUS;
 import com.farmSphere.core.event.marketplace.ProduceListedEvent;
 import com.farmSphere.infrastructure.eventbus.DomainEventPublisher;
 import com.farmSphere.infrastructure.exception.DomainException;
+import com.farmSphere.infrastructure.security.SecurityUtils;
 import com.farmSphere.marketplace.data.model.Produce;
 import com.farmSphere.marketplace.data.repository.ProduceRepository;
 import com.farmSphere.marketplace.dto.request.ListProduceRequest;
@@ -30,6 +31,7 @@ public class ProduceServiceImplementation implements ProduceService{
 
     @Override
     public ProduceResponse listProduce(Long farmerId, String farmerName, String farmerEmail, ListProduceRequest request) {
+        SecurityUtils.requireFarmer();
         if (!request.getExpiryDate().isAfter(request.getHarvestDate())) throw new DomainException("Expiry date must be after harvest date", 400);
         if (request.getExpiryDate().isBefore(LocalDate.now())) throw new DomainException("Expiry date must be in the future", 400);
 
@@ -52,6 +54,7 @@ public class ProduceServiceImplementation implements ProduceService{
 
     @Override
     public ProduceResponse updateProduce(Long produceId, Long farmerId, UpdateProduceRequest request) {
+        SecurityUtils.requireFarmer();
         Produce produce = produceRepository.findByProduceIdAndFarmerId(produceId, farmerId).orElseThrow(() -> new DomainException("Produce not found", 404));
         if (request.getQuantityAvailable() != null) {
             produce.setQuantityAvailable(request.getQuantityAvailable());
@@ -70,6 +73,7 @@ public class ProduceServiceImplementation implements ProduceService{
 
     @Override
     public void deleteProduce(Long produceId, Long farmerId) {
+        SecurityUtils.requireFarmer();
         Produce produce = produceRepository.findByProduceIdAndFarmerId(produceId, farmerId).orElseThrow(() -> new DomainException("Produce not found", 404));
         if (produce.getStatus() != PRODUCE_STATUS.AVAILABLE) throw new DomainException("Cannot delete produce with status: " + produce.getStatus().name(), 400);
         produceRepository.delete(produce);
@@ -77,6 +81,7 @@ public class ProduceServiceImplementation implements ProduceService{
 
     @Override
     public List<ProduceResponse> getMyProduce(Long farmerId) {
+        SecurityUtils.requireFarmer();
         return produceRepository.findAllByFarmerId(farmerId)
                 .stream()
                 .map(ProduceResponse::from)
@@ -85,6 +90,7 @@ public class ProduceServiceImplementation implements ProduceService{
 
     @Override
     public List<ProduceResponse> getAllAvailableProduce() {
+        SecurityUtils.requireUser();
         return produceRepository.findAllByStatus(PRODUCE_STATUS.AVAILABLE)
                 .stream()
                 .map(ProduceResponse::from)
@@ -93,6 +99,7 @@ public class ProduceServiceImplementation implements ProduceService{
 
     @Override
     public List<ProduceResponse> getByCategory(PRODUCE_CATEGORY category) {
+        SecurityUtils.requireUser();
         return produceRepository
                 .findAllByStatusAndCategory(PRODUCE_STATUS.AVAILABLE, category)
                 .stream()
@@ -102,6 +109,7 @@ public class ProduceServiceImplementation implements ProduceService{
 
     @Override
     public ProduceResponse getProduceById(Long produceId) {
+        SecurityUtils.requireUser();
         return produceRepository.findById(produceId)
                 .map(ProduceResponse::from)
                 .orElseThrow(() -> new DomainException("Produce not found", 404));

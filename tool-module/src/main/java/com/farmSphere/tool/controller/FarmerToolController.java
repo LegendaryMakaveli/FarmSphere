@@ -5,6 +5,7 @@ import com.farmSphere.infrastructure.security.SecurityUtils;
 import com.farmSphere.tool.dto.request.ToolBookingRequest;
 import com.farmSphere.tool.service.ToolBookingService;
 import com.farmSphere.tool.service.ToolService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,7 +29,7 @@ public class FarmerToolController {
 
 
     @PostMapping("/bookings")
-    public ResponseEntity<ApiResponse<?>> bookTool(@RequestBody ToolBookingRequest request) {
+    public ResponseEntity<ApiResponse<?>> bookTool(@RequestBody @Valid ToolBookingRequest request) {
         Long farmerId = SecurityUtils.getCurrentUserId();
         String farmerEmail = SecurityUtils.getCurrentUserEmail();
         String farmerFirstName = SecurityUtils.getCurrentUserFirstName();

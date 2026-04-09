@@ -5,6 +5,7 @@ import com.farmSphere.infrastructure.response.ApiResponse;
 import com.farmSphere.infrastructure.security.SecurityUtils;
 import com.farmSphere.marketplace.dto.request.ConfirmSaleRequest;
 import com.farmSphere.marketplace.service.OrderService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -40,7 +41,7 @@ public class AdminOrderController {
     }
 
     @PostMapping("/{orderId}/confirm-sale")
-    public ResponseEntity<ApiResponse<?>> confirmSale(@PathVariable Long orderId, @RequestBody ConfirmSaleRequest request) {
+    public ResponseEntity<ApiResponse<?>> confirmSale(@PathVariable Long orderId, @RequestBody @Valid ConfirmSaleRequest request) {
         Long adminId = SecurityUtils.getCurrentUserId();
         
         return ResponseEntity.ok(ApiResponse.success("Sale confirmed", orderService.confirmSale(orderId, adminId, request)));
