@@ -10,7 +10,6 @@ import java.util.Set;
 
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
 @Setter
 @Getter
 @Table( name = "users")
@@ -26,6 +25,12 @@ public class User {
     private String secondName;
 
     private int age;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Farmer farmer;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Investor investor;
 
     @Column(nullable = false, unique = true)
     private String email;

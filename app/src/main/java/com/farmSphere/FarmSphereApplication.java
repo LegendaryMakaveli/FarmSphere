@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.time.LocalDateTime;
-
+import java.util.Collections;
 
 
 @SpringBootApplication
@@ -59,7 +59,7 @@ public class FarmSphereApplication {
                 admin.setEmail(adminEmail);
                 admin.setPassword(PasswordHash.hash(adminPassword));
                 admin.setAddress(adminAddress);
-                admin.setRole(ROLE.ADMIN);
+                admin.setRoles(Collections.singleton(ROLE.ADMIN));
                 admin.setAge(30);
                 admin.setPhoneNumber(adminPhoneNumber);
                 admin.setActive(true);

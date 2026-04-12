@@ -42,7 +42,7 @@ public class AuthController {
 
 
     @PostMapping("/upgrade/farmer")
-    public ResponseEntity<ApiResponse<UserProfileStatus>> upgradeToFarmer(@RequestBody @Valid UpgradeToFarmerRequest request) {
+    public ResponseEntity<ApiResponse<UserProfileStatus>> upgradeToFarmer(@Valid @RequestBody UpgradeToFarmerRequest request) {
         Long userId = SecurityUtils.getCurrentUserId();
         String email = SecurityUtils.getCurrentUserEmail();
 

@@ -11,11 +11,17 @@ import lombok.Setter;
 @Setter
 @Getter
 @Table( name = "farmers")
-public class Farmer extends User{
-    @Column(nullable = false)
+public class Farmer{
+    @Id
+    private Long id;
+
     private String farmName;
 
-    @Column(nullable = false)
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "id")
+    private User user;
+
     private String farmAddress;
 
     @Column(nullable = false)

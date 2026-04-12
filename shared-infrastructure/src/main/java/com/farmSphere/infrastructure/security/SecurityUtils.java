@@ -57,5 +57,5 @@ public class SecurityUtils {
     public static void requireFarmer() { requireRole("FARMER"); }
     public static void requireInvestor() { requireRole("INVESTOR"); }
     public static void requireAdmin() { requireRole("ADMIN"); }
-    public static void requireUser() { requireRole("BUYER"); }
+    public static void requireUser() { requireRole("USER"); }
 }

@@ -14,7 +14,7 @@ public class Validation {
         if (!request.getPassword().matches(passwordPattern)) {throw new DomainException("Password must contain at least 6 characters, one uppercase letter, one lowercase letter, one number, and one special character!", 400);}
         if (!request.getFirstName().matches(namePattern)) {throw new DomainException("First name must contain only letters!", 400);}
         if (!request.getSecondName().matches(namePattern)) {throw new DomainException("Second name must contain only letters!", 400);}
-        if (!request.getPhoneNumber().matches("^[0-9]{10}$")) {throw new DomainException("Invalid phone number format!", 400);}
+        if(request.getPhoneNumber() == null || request.getPhoneNumber().trim().isEmpty()) throw new DomainException("Phone number cannot be empty", 400);
         if (request.getAddress() == null || request.getAddress().trim().isEmpty() ) {throw new DomainException("Address cannot be empty", 400);}
         if (request.getGender() == null) {throw new DomainException("Gender cannot be empty", 400);}
         if (request.getAge() < 18) {throw new DomainException("User must be at least 18 years old!", 400);}

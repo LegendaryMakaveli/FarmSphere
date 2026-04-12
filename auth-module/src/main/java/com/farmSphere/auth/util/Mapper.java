@@ -7,6 +7,7 @@ import com.farmSphere.auth.dto.request.UserRegisterRequest;
 
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 
 public class Mapper {
 
@@ -19,7 +20,7 @@ public class Mapper {
         user.setPhoneNumber(request.getPhoneNumber().trim());
         user.setAddress(request.getAddress().trim().toLowerCase());
         user.setGender(GENDER.valueOf(request.getGender().name()));
-        user.setRole(ROLE.USER);
+        user.setRoles(Collections.singleton(ROLE.USER));
         user.setActive(true);
         user.setDateCreated(LocalDateTime.now());
         return user;

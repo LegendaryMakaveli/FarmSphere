@@ -128,15 +128,11 @@ public class AuthServiceImplementation implements AuthService {
         User user = userRepository.findById(userId).orElseThrow(() -> new DomainException("User not found", 404));
 
         Farmer farmer = new Farmer();
-        farmer.setId(user.getId());
-        farmer.setFarmName(request.getFarmName());
-        farmer.setFarmAddress(request.getFarmAddress());
+        farmer.setUser(user);
         farmer.setExperienceLevel(request.getExperienceLevel());
-        farmer.setTotalLandSize(request.getTotalLandSize());
+        farmer.setRegistrationStatus(REGISTRATION_STATUS.SUBMITTED);
         farmerRepository.save(farmer);
-
         user.getRoles().add(ROLE.FARMER);
-        userRepository.save(user);
 
         eventPublisher.publish(new FarmerRegisteredEvent(
                 userId,
@@ -160,12 +156,11 @@ public class AuthServiceImplementation implements AuthService {
         User user = userRepository.findById(userId).orElseThrow(() -> new DomainException("User not found", 404));
 
         Investor investor = new Investor();
-        investor.setId(user.getId());
+        investor.setUser(user);
         investor.setStartDate(LocalDateTime.now());
         investorRepository.save(investor);
 
         user.getRoles().add(ROLE.INVESTOR);
-        userRepository.save(user);
 
         eventPublisher.publish(new InvestorRegisteredEvent(
                 userId,
@@ -208,8 +203,6 @@ public class AuthServiceImplementation implements AuthService {
                 .investorStatus(investorStatus)
                 .build();
     }
-
-
 
 
     public String resetPassword(PasswordResetRequest request) {

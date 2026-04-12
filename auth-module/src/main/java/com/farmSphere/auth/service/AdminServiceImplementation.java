@@ -4,6 +4,8 @@ import com.farmSphere.auth.data.model.Farmer;
 import com.farmSphere.auth.data.model.Investor;
 import com.farmSphere.auth.data.repository.FarmerRepository;
 import com.farmSphere.auth.data.repository.InvestorRepository;
+import com.farmSphere.auth.dto.response.UpgradeFarmerResponse;
+import com.farmSphere.auth.dto.response.UpgradeInvestorResponse;
 import com.farmSphere.core.enums.REGISTRATION_STATUS;
 import com.farmSphere.core.event.auth.FarmerApprovedEvent;
 import com.farmSphere.core.event.auth.FarmerRejectedEvent;
@@ -27,15 +29,34 @@ public class AdminServiceImplementation implements AdminService{
     private final DomainEventPublisher eventPublisher;
 
     @Override
-    public List<Farmer> getPendingFarmers() {
+    public List<UpgradeFarmerResponse> getPendingFarmers() {
         SecurityUtils.requireAdmin();
-        return farmerRepository.findAllByRegistrationStatus(REGISTRATION_STATUS.SUBMITTED);
+        return farmerRepository.findAllByRegistrationStatus(REGISTRATION_STATUS.SUBMITTED)
+                .stream()
+                .map(farmer -> new UpgradeFarmerResponse(
+                        farmer.getId(),
+                        farmer.getFarmName(),
+                        farmer.getUser().getFirstName(),
+                        farmer.getUser().getSecondName(),
+                        farmer.getUser().getAge(),
+                        farmer.getRegistrationStatus()
+                ))
+                .toList();
     }
 
     @Override
-    public List<Investor> getPendingInvestors() {
+    public List<UpgradeInvestorResponse> getPendingInvestors() {
         SecurityUtils.requireAdmin();
-        return investorRepository.findAllByRegistrationStatus(REGISTRATION_STATUS.SUBMITTED);
+        return investorRepository.findAllByRegistrationStatus(REGISTRATION_STATUS.SUBMITTED)
+                .stream()
+                .map(investor -> new UpgradeInvestorResponse(
+                        investor.getId(),
+                        investor.getUser().getFirstName(),
+                        investor.getUser().getSecondName(),
+                        investor.getUser().getAge(),
+                        investor.getRegistrationStatus()
+                ))
+                .toList();
     }
 
     @Transactional
@@ -50,8 +71,8 @@ public class AdminServiceImplementation implements AdminService{
 
         eventPublisher.publish(new FarmerApprovedEvent(
                 farmer.getId(),
-                farmer.getEmail(),
-                farmer.getFirstName()
+                farmer.getUser().getEmail(),
+                farmer.getUser().getFirstName()
         ));
     }
 
@@ -66,8 +87,8 @@ public class AdminServiceImplementation implements AdminService{
 
         eventPublisher.publish(new FarmerRejectedEvent(
                 farmer.getId(),
-                farmer.getEmail(),
-                farmer.getFirstName(),
+                farmer.getUser().getEmail(),
+                farmer.getUser().getFirstName(),
                 reason
         ));
     }
@@ -84,8 +105,8 @@ public class AdminServiceImplementation implements AdminService{
 
         eventPublisher.publish(new InvestorApprovedEvent(
                 investor.getId(),
-                investor.getEmail(),
-                investor.getFirstName()
+                investor.getUser().getEmail(),
+                investor.getUser().getFirstName()
         ));
     }
 
@@ -100,8 +121,8 @@ public class AdminServiceImplementation implements AdminService{
 
         eventPublisher.publish(new InvestorRejectedEvent(
                 investor.getId(),
-                investor.getEmail(),
-                investor.getFirstName(),
+                investor.getUser().getEmail(),
+                investor.getUser().getFirstName(),
                 reason
         ));
     }

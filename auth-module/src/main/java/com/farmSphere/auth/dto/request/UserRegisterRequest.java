@@ -3,7 +3,7 @@ package com.farmSphere.auth.dto.request;
 import com.farmSphere.auth.data.model.GENDER;
 import jakarta.validation.constraints.*;
 import lombok.Data;
-import org.hibernate.validator.constraints.Length;
+
 
 @Data
 public class UserRegisterRequest {
@@ -33,7 +33,7 @@ public class UserRegisterRequest {
     @Size(min = 5, max = 200, message = "Address must be between 5 and 200 characters")
     private String address;
 
-    @NotBlank(message = "Gender is required!")
+    @NotNull(message = "Gender is required!")
     private GENDER gender;
 
     @NotNull(message = "Age is required!")
