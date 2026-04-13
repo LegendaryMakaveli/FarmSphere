@@ -12,6 +12,8 @@ public class CreateAssetRequest {
     @NotNull(message = "crop id is required")
     private Long cropPlanId;
 
+    private Float overrideROI;
+
     @NotBlank(message = "Crop name is required")
     @Size(min = 2, max = 50, message = "Crop name must be between 2 and 50")
     private String cropName;
@@ -34,4 +36,7 @@ public class CreateAssetRequest {
 
     @NotNull(message = "funding deadline is required")
     private LocalDate fundingDeadline;
+
+    private BigDecimal marketPricePerUnit;
+    private String marketUnit;
 }

@@ -15,7 +15,7 @@ public class ToolListener {
     @EventListener
     public void onBookingCreated(ToolBookingCreatedEvent event) {
         emailChannel.send(
-                "admin@farmsphere.com",
+                "briankachelhoffer698@gmail.com",
                 "New Tool Booking Request - FarmSphere",
                 "A new tool booking has been submitted.\n\n"
                         + "Booking ID : " + event.getBookingId() + "\n"

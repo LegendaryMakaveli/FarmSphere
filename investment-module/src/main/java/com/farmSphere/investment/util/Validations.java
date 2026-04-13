@@ -25,7 +25,6 @@ public class Validations {
         asset.setFarmerName(request.getFarmerName());
         asset.setTotalUnits(request.getTotalUnits());
         asset.setUnitPrice(request.getUnitPrice());
-        asset.setExpectedROI(request.getExpectedROI());
         asset.setFundingDeadline(request.getFundingDeadline());
         asset.setStatus(ASSET_STATUS.OPEN);
         asset.setUnitsSold(0);

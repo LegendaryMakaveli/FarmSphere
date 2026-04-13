@@ -22,18 +22,18 @@ public class AdminEstateController {
     private final EstateService estateService;
     private final PlotService plotService;
 
-    @PostMapping("/estates")
+    @PostMapping("/create/estates")
     public ResponseEntity<ApiResponse<?>> createEstate(@RequestBody @Valid CreateEstateRequest request) {
         return ResponseEntity.status(201).body(ApiResponse.success("Estate created", estateService.createEstate(request)));
     }
 
-    @GetMapping("/estates")
+    @GetMapping("/get-all/estates")
     public ResponseEntity<ApiResponse<?>> getAllEstates() {
         return ResponseEntity.ok(
                 ApiResponse.success("Estates fetched", estateService.getAllEstates()));
     }
 
-    @PostMapping("/clusters")
+    @PostMapping("/create/clusters")
     public ResponseEntity<ApiResponse<?>> createCluster(@RequestBody @Valid CreateClusterRequest request) {
         return ResponseEntity.status(201).body(ApiResponse.success("Cluster created", estateService.createCluster(request)));
     }

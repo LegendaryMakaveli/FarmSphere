@@ -47,6 +47,9 @@ public class FarmAsset {
     private ASSET_STATUS status = ASSET_STATUS.OPEN;
 
     @Column(nullable = false)
+    private float expectedYieldKg;
+
+    @Column(nullable = false)
     private LocalDate fundingDeadline;  // after this date → CLOSED regardless
 
     private LocalDateTime createdAt = LocalDateTime.now();
