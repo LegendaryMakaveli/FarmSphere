@@ -16,7 +16,7 @@ public class ListProduceRequest {
     @Size(min = 2, max = 50, message = "Crop name must be between 2 and 50 characters")
     private String cropName;
 
-    @NotBlank(message = "Category is required")
+    @NotNull(message = "Category is required")
     private PRODUCE_CATEGORY category;
 
     @NotNull(message = "Quantity is required")

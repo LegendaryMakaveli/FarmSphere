@@ -124,10 +124,14 @@ public class AuthServiceImplementation implements AuthService {
     @Override
     public UserProfileStatus upgradeToFarmer(Long userId, String email, UpgradeToFarmerRequest request) {
         SecurityUtils.requireUser();
-        if (farmerRepository.existsById(userId)) throw new DomainException("You are already registered as a Farmer", 409);
         User user = userRepository.findById(userId).orElseThrow(() -> new DomainException("User not found", 404));
+        
+        Farmer farmer = farmerRepository.findById(userId).orElse(new Farmer());
+        
+        if (farmer.getRegistrationStatus() != null && farmer.getRegistrationStatus() != REGISTRATION_STATUS.REJECTED) {
+            throw new DomainException("You are already registered as a Farmer", 409);
+        }
 
-        Farmer farmer = new Farmer();
         farmer.setUser(user);
         farmer.setExperienceLevel(request.getExperienceLevel());
         farmer.setRegistrationStatus(REGISTRATION_STATUS.SUBMITTED);
@@ -152,12 +156,17 @@ public class AuthServiceImplementation implements AuthService {
     @Transactional
     public UserProfileStatus upgradeToInvestor(Long userId, String email) {
         SecurityUtils.requireUser();
-        if (investorRepository.existsById(userId)) throw new DomainException("You are already registered as an Investor", 409);
         User user = userRepository.findById(userId).orElseThrow(() -> new DomainException("User not found", 404));
 
-        Investor investor = new Investor();
+        Investor investor = investorRepository.findById(userId).orElse(new Investor());
+        
+        if (investor.getRegistrationStatus() != null && investor.getRegistrationStatus() != REGISTRATION_STATUS.REJECTED) {
+            throw new DomainException("You are already registered as an Investor", 409);
+        }
+
         investor.setUser(user);
         investor.setStartDate(LocalDateTime.now());
+        investor.setRegistrationStatus(REGISTRATION_STATUS.SUBMITTED);
         investorRepository.save(investor);
 
         user.getRoles().add(ROLE.INVESTOR);
