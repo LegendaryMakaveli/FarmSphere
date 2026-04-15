@@ -19,7 +19,7 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: create  # ⚠️ Production: validate (not update)
-    show-sql: false
+    show-sql: true
     properties:
       hibernate:
         format_sql: false
