@@ -58,19 +58,24 @@ public class FarmSphereApplication {
     @Bean
     CommandLineRunner createAdmin(UserRepository repository) {
         return args -> {
-
-            log.info(" Waiting for tables...");
-            while (true) {
+            log.info("🚀 Checking database...");
+            int attempts = 0;
+            while (attempts < 15) {
                 try {
-                    repository.count();
-                    log.info("✅ Database ready!");
+                    long count = repository.count();
+                    log.info("✅ Database ready! Users: {}", count);
                     break;
                 } catch (Exception e) {
-                    log.info(" Tables not ready, waiting 2s...");
-                    Thread.sleep(5000);
+                    attempts++;
+                    log.info("⏳ Tables not ready (attempt {}/15), waiting 2s...", attempts);
+                    Thread.sleep(2000);
                 }
             }
 
+            if (attempts >= 15) {
+                log.warn("⚠️ Timeout waiting for tables - skipping admin creation");
+                return;
+            }
             if(!repository.existsByEmail(adminEmail)) {
                 log.info(">>> Admin not found, creating...");
                 User admin = new User();
