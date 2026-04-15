@@ -51,15 +51,6 @@
             <artifactId>notification-module</artifactId>
         </dependency>
 
-        <!-- Devtools only in app — hot reload during development -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
-        </dependency>
-
-        <!-- H2 only in app — database lives here -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
