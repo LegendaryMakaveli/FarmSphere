@@ -14,6 +14,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -57,7 +58,15 @@ public class FarmSphereApplication {
     @Bean
     CommandLineRunner createAdmin(UserRepository repository) {
         return args -> {
-            Thread.sleep(30000);
+
+            log.info("Checking/creating admin user...");
+            try {
+                repository.count();
+            } catch (Exception e) {
+                log.warn("Waiting for database...");
+                Thread.sleep(5000);
+            }
+
             if(!repository.existsByEmail(adminEmail)) {
                 log.info(">>> Admin not found, creating...");
                 User admin = new User();
@@ -77,8 +86,14 @@ public class FarmSphereApplication {
 
                 repository.save(admin);
                 log.info(">>> Admin created successfully");
+            }else {
+                log.info("ℹ️ Admin already exists: {}", adminEmail);
             }
         };
+    }
+    @Scheduled(fixedRate = 150000)
+    public void keepAlive() {
+        log.debug("🤖 FarmSphere alive: {}", LocalDateTime.now());
     }
 
 }

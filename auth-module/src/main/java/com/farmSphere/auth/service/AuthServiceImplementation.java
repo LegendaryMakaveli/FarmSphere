@@ -229,11 +229,4 @@ public class AuthServiceImplementation implements AuthService {
         return "Password reset successful";
     }
 
-    @Scheduled(fixedRate = 150000)
-    public void keepAlive() {
-        log.info("🤖 Alive: " + System.currentTimeMillis());
-    }
-
-
-
 }
