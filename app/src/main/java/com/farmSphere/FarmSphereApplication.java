@@ -55,8 +55,7 @@ public class FarmSphereApplication {
     @Bean
     CommandLineRunner createAdmin(UserRepository repository) {
         return args -> {
-            log.info(">>> createAdmin runner started");
-            log.info(">>> adminEmail = {}", adminEmail);
+            Thread.sleep(30000);
             if(!repository.existsByEmail(adminEmail)) {
                 log.info(">>> Admin not found, creating...");
                 User admin = new User();
