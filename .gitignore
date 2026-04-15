@@ -23,6 +23,9 @@ target/
 .sts4-cache
 app/src/main/resources/application.properties
 shared-infrastructure/src/main/resources/application.properties
+app/src/main/resources/application.yml
+shared-infrastructure/src/main/resources/application.yml
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
