@@ -43,40 +43,40 @@ public class FarmSphereApplication {
         SpringApplication.run(FarmSphereApplication.class, args);
     }
 
-    @Value("${app.admin.email}")
-    private String adminEmail;
-    @Value("${app.admin.password}")
-    private String adminPassword;
-    @Value("${app.admin.address}")
-    private String adminAddress;
-    @Value("${app.admin.phoneNumber}")
-    private String adminPhoneNumber;
+//    @Value("${app.admin.email}")
+//    private String adminEmail;
+//    @Value("${app.admin.password}")
+//    private String adminPassword;
+//    @Value("${app.admin.address}")
+//    private String adminAddress;
+//    @Value("${app.admin.phoneNumber}")
+//    private String adminPhoneNumber;
 
-    @Bean
-    CommandLineRunner createAdmin(UserRepository repository) {
-        return args -> {
-            Thread.sleep(30000);
-            if(!repository.existsByEmail(adminEmail)) {
-                log.info(">>> Admin not found, creating...");
-                User admin = new User();
-                admin.setFirstName("Mary");
-                admin.setSecondName("Kachelhoffer");
-                admin.setEmail(adminEmail);
-                admin.setPassword(PasswordHash.hash(adminPassword));
-                admin.setAddress(adminAddress);
-                admin.setRoles(Collections.singleton(ROLE.ADMIN));
-                admin.setAge(30);
-                admin.setPhoneNumber(adminPhoneNumber);
-                admin.setActive(true);
-                admin.setGender(GENDER.MALE);
-                admin.setVerified(true);
-                admin.setDateCreated(LocalDateTime.now());
-                admin.setLastLogin(LocalDateTime.now());
-
-                repository.save(admin);
-                log.info(">>> Admin created successfully");
-            }
-        };
-    }
+//    @Bean
+//    CommandLineRunner createAdmin(UserRepository repository) {
+//        return args -> {
+//            Thread.sleep(30000);
+//            if(!repository.existsByEmail(adminEmail)) {
+//                log.info(">>> Admin not found, creating...");
+//                User admin = new User();
+//                admin.setFirstName("Mary");
+//                admin.setSecondName("Kachelhoffer");
+//                admin.setEmail(adminEmail);
+//                admin.setPassword(PasswordHash.hash(adminPassword));
+//                admin.setAddress(adminAddress);
+//                admin.setRoles(Collections.singleton(ROLE.ADMIN));
+//                admin.setAge(30);
+//                admin.setPhoneNumber(adminPhoneNumber);
+//                admin.setActive(true);
+//                admin.setGender(GENDER.MALE);
+//                admin.setVerified(true);
+//                admin.setDateCreated(LocalDateTime.now());
+//                admin.setLastLogin(LocalDateTime.now());
+//
+//                repository.save(admin);
+//                log.info(">>> Admin created successfully");
+//            }
+//        };
+//    }
 
 }
