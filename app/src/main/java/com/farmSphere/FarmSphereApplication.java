@@ -6,12 +6,15 @@ import com.farmSphere.auth.data.model.User;
 import com.farmSphere.auth.data.repository.UserRepository;
 import com.farmSphere.auth.util.PasswordHash;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.event.EventListener;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -55,27 +58,14 @@ public class FarmSphereApplication {
     @Value("${app.admin.phoneNumber}")
     private String adminPhoneNumber;
 
-    @Bean
-    CommandLineRunner createAdmin(UserRepository repository) {
-        return args -> {
-            log.info("🚀 Checking database...");
-            int attempts = 0;
-            while (attempts < 15) {
-                try {
-                    long count = repository.count();
-                    log.info("✅ Database ready! Users: {}", count);
-                    break;
-                } catch (Exception e) {
-                    attempts++;
-                    log.info("⏳ Tables not ready (attempt {}/15), waiting 2s...", attempts);
-                    Thread.sleep(2000);
-                }
-            }
+    @Autowired
+    private UserRepository repository;
 
-            if (attempts >= 15) {
-                log.warn("⚠️ Timeout waiting for tables - skipping admin creation");
-                return;
-            }
+    @EventListener(ApplicationReadyEvent.class)
+    public void createAdminOnReady() {
+        log.info(" App fully ready - creating admin");
+
+        try {
             if(!repository.existsByEmail(adminEmail)) {
                 log.info(">>> Admin not found, creating...");
                 User admin = new User();
@@ -94,15 +84,19 @@ public class FarmSphereApplication {
                 admin.setLastLogin(LocalDateTime.now());
 
                 repository.save(admin);
-                log.info(">>> Admin created successfully");
+                log.info(" Admin created successfully");
             }else {
-                log.info("ℹ️ Admin already exists: {}", adminEmail);
+                log.info(" Admin already exists: {}", adminEmail);
             }
-        };
+        } catch (Exception e) {
+            log.warn(" Admin creation failed (safe): {}", e.getMessage());
+        }
     }
+
+
     @Scheduled(fixedRate = 150000)
     public void keepAlive() {
-        log.debug("🤖 FarmSphere alive: {}", LocalDateTime.now());
+        log.debug(" FarmSphere alive: {}", LocalDateTime.now());
     }
 
 }
