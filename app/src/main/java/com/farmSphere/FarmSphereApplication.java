@@ -59,12 +59,16 @@ public class FarmSphereApplication {
     CommandLineRunner createAdmin(UserRepository repository) {
         return args -> {
 
-            log.info("Checking/creating admin user...");
-            try {
-                repository.count();
-            } catch (Exception e) {
-                log.warn("Waiting for database...");
-                Thread.sleep(5000);
+            log.info(" Waiting for tables...");
+            while (true) {
+                try {
+                    repository.count();
+                    log.info("✅ Database ready!");
+                    break;
+                } catch (Exception e) {
+                    log.info(" Tables not ready, waiting 2s...");
+                    Thread.sleep(5000);
+                }
             }
 
             if(!repository.existsByEmail(adminEmail)) {
