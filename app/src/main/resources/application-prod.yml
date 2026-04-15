@@ -2,9 +2,8 @@ spring:
   profiles:
     active: prod
 
-  # Database - REQUIRED ENV VARS
   datasource:
-    url: ${spring.datasource.url:}  # jdbc:postgresql://...
+    url: ${spring.datasource.url:}
     username: ${spring.datasource.username:}
     password: ${spring.datasource.password:}
     driver-class-name: org.postgresql.Driver
@@ -14,11 +13,10 @@ spring:
       idle-timeout: 300000
       connection-timeout: 20000
 
-  # JPA/Hibernate - Production Optimized
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: create  # ⚠️ Production: validate (not update)
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
@@ -28,12 +26,11 @@ spring:
         order_inserts: true
         order_updates: true
 
-  # Email - Gmail SMTP
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ${spring.mail.username:}  # REQUIRED
-    password: ${spring.mail.password:}  # App Password REQUIRED
+    username: ${spring.mail.username:}
+    password: ${spring.mail.password:}
     properties:
       mail:
         smtp:
@@ -51,48 +48,40 @@ spring:
           enabled: true
   security:
     user:
-          name: ${spring.security.user.name:}  # Optional
+          name: ${spring.security.user.name:}
 
-# App Configuration
 app:
   admin:
-    email: ${app.admin.email:}  # REQUIRED
+    email: ${app.admin.email:}
     name: ${app.admin.name:Admin}
-    password: ${app.admin.password:}  # REQUIRED (hash this in prod)
+    password: ${app.admin.password:}
     phoneNumber: ${app.admin.phoneNumber:}
     address: ${app.admin.address:}
 
-  # Services
   services:
     farming:
-      url: ${services.farming.url:}  # Backend service URL
+      url: ${services.farming.url:}
 
-  # CORS
   cors:
     allowed:
-      origins: ${cors.allowed.origins:}  # REQUIRED
+      origins: ${cors.allowed.origins:}
 
-# JWT Security
+
 jwt:
-  secret: ${jwt.secret:}  # REQUIRED - 256bit minimum
-  expiration: ${jwt.expiration:86400000}  # 24h
+  secret: ${jwt.secret:}
+  expiration: ${jwt.expiration:86400000}
 
-# Server Production Settings
 server:
   port: ${SERVER_PORT:8080}
   error:
-    include-message: never  # Security
+    include-message: never
     include-binding-errors: never
     include-stacktrace: never
     include-exception: false
   tomcat:
     max-http-form-post-size: 10MB
 
-# File Upload Limits
 
-# Security - Production
-
-# Logging - Production
 logging:
   level:
     root: INFO
@@ -105,7 +94,6 @@ logging:
   file:
     name: /tmp/farmsphere.log
 
-# Management Endpoints
 management:
   endpoints:
     web:
@@ -115,7 +103,6 @@ management:
     health:
       show-details: never
 
-# Actuator Info
 info:
   app:
     name: FarmSphere
