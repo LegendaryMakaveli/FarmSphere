@@ -3,6 +3,7 @@ package com.farmSphere.notification.listeners;
 import com.farmSphere.core.event.marketplace.*;
 import com.farmSphere.notification.channel.EmailChannel;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
@@ -12,10 +13,13 @@ import org.springframework.stereotype.Component;
 public class MarketplaceListener {
     private final EmailChannel emailChannel;
 
+    @Value("${app.admin.email}")
+    private String adminEmail;
+
     @EventListener
     public void onProduceListed(ProduceListedEvent event) {
         emailChannel.send(
-                "briankachelhoffer698@gmail.com",
+                adminEmail,
                 "New Produce Listed - FarmSphere",
                 "A farmer has listed new produce.\n\n"
                         + "Farmer   : " + event.getFarmerName() + "\n"
@@ -29,7 +33,7 @@ public class MarketplaceListener {
     @EventListener
     public void onOrderPlaced(OrderPlacedEvent event) {
         emailChannel.send(
-                "briankachelhoffer698@gmail.com",
+                adminEmail,
                 "New Order Placed - FarmSphere",
                 "A new order has been placed.\n\n"
                         + "Order ID   : " + event.getOrderId() + "\n"

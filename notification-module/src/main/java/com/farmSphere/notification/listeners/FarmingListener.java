@@ -3,6 +3,7 @@ package com.farmSphere.notification.listeners;
 import com.farmSphere.core.event.farming.*;
 import com.farmSphere.notification.channel.EmailChannel;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +12,9 @@ import org.springframework.stereotype.Component;
 public class FarmingListener {
 
     private final EmailChannel emailChannel;
+
+    @Value("${app.admin.email}")
+    private String adminEmail;
 
     @EventListener
     public void onFarmCycleStarted(FarmCycleStartedEvent event) {
@@ -29,7 +33,7 @@ public class FarmingListener {
     @EventListener
     public void onFarmCycleHarvested(FarmCycleHarvestedEvent event) {
         emailChannel.send(
-                "brainkachelhoffer698@gmail.com",
+                adminEmail,
                 "Harvest Recorded - FarmSphere",
                 "A farm cycle has been harvested.\n\n"
                         + "Crop       : " + event.getCropName() + "\n"
@@ -43,7 +47,7 @@ public class FarmingListener {
     @EventListener
     public void onIntercropAdded(IntercropAddedEvent event) {
         emailChannel.send(
-                "brainkachehoffer698@gmail.com",
+                adminEmail,
                 "Intercrop Added - FarmSphere",
                 "A farmer has added an intercrop.\n\n"
                         + "Crop       : " + event.getCropName() + "\n"

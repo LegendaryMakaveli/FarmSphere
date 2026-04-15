@@ -5,6 +5,7 @@ import com.farmSphere.auth.data.model.ROLE;
 import com.farmSphere.auth.data.model.User;
 import com.farmSphere.auth.data.repository.UserRepository;
 import com.farmSphere.auth.util.PasswordHash;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -16,7 +17,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import java.time.LocalDateTime;
 import java.util.Collections;
 
-
+@Slf4j
 @SpringBootApplication
 @EntityScan(basePackages = {
         "com.farmSphere.auth.data.model",
@@ -54,9 +55,12 @@ public class FarmSphereApplication {
     @Bean
     CommandLineRunner createAdmin(UserRepository repository) {
         return args -> {
+            log.info(">>> createAdmin runner started");
+            log.info(">>> adminEmail = {}", adminEmail);
             if(!repository.existsByEmail(adminEmail)) {
+                log.info(">>> Admin not found, creating...");
                 User admin = new User();
-                admin.setFirstName("Brian");
+                admin.setFirstName("Mary");
                 admin.setSecondName("Kachelhoffer");
                 admin.setEmail(adminEmail);
                 admin.setPassword(PasswordHash.hash(adminPassword));
@@ -71,6 +75,7 @@ public class FarmSphereApplication {
                 admin.setLastLogin(LocalDateTime.now());
 
                 repository.save(admin);
+                log.info(">>> Admin created successfully");
             }
         };
     }

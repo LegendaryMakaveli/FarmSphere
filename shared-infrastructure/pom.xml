@@ -56,7 +56,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- JJWT — for JWT generation and parsing -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
@@ -76,6 +75,7 @@
             <version>0.11.5</version>
             <scope>runtime</scope>
         </dependency>
+
 
     </dependencies>
 

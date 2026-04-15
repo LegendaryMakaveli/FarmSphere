@@ -4,6 +4,7 @@ package com.farmSphere.notification.listeners;
 import com.farmSphere.core.event.investment.*;
 import com.farmSphere.notification.channel.EmailChannel;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +13,9 @@ import org.springframework.stereotype.Component;
 public class InvestmentListener {
 
     private final EmailChannel emailChannel;
+
+    @Value("${app.admin.email}")
+    private String adminEmail;
 
     @EventListener
     public void onInvestmentMade(InvestmentMadeEvent event) {
@@ -30,7 +34,7 @@ public class InvestmentListener {
     @EventListener
     public void onAssetFullyFunded(AssetFullyFundedEvent event) {
         emailChannel.send(
-                "briankachelhoffer698@gmail.com",
+                adminEmail,
                 "Asset Fully Funded - FarmSphere",
                 "Farm asset for crop plan "
                         + event.getCropName() + " is fully funded.\n"
@@ -77,7 +81,7 @@ public class InvestmentListener {
     @EventListener
     public void onYieldDistributed(YieldDistributedEvent event) {
         emailChannel.send(
-                "briankachelhoffer698@gmail.com",
+                adminEmail,
                 "Yield Distribution Complete - FarmSphere",
                 "ROI distribution complete for " + event.getCropName() + ".\n\n"
                         + "Total Paid Out  : ₦" + event.getTotalPaidOut() + "\n"

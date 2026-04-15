@@ -21,7 +21,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <!--  Declare child modules  -->
     <modules>
         <module>core-module</module>
         <module>shared-infrastructure</module>
@@ -34,14 +33,10 @@
         <module>notification-module</module>
         <module>app</module>
     </modules>
-    <!--
-            dependencyManagement = "declare versions here once"
-            Child modules still have to opt in by adding the dependency
-            in their own pom.xml — but they never specify a version.
-            Nothing gets added to a module unless it asks for it.
-         -->
+
     <dependencyManagement>
         <dependencies>
+
             <dependency>
                 <groupId>com.farmsphere</groupId>
                 <artifactId>core</artifactId>
@@ -105,10 +100,7 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    <!--
-            Lombok annotation processor declared once here.
-            spring-boot-maven-plugin is NOT here — only in app/pom.xml
-         -->
+
     <build>
         <pluginManagement>
             <plugins>

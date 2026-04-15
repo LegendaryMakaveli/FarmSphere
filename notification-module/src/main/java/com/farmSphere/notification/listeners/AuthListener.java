@@ -4,6 +4,7 @@ package com.farmSphere.notification.listeners;
 import com.farmSphere.core.event.auth.*;
 import com.farmSphere.notification.channel.EmailChannel;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
@@ -13,8 +14,20 @@ import org.springframework.stereotype.Component;
 public class AuthListener {
     private final EmailChannel emailChannel;
 
+    @Value("${app.admin.email}")
+    private String adminEmail;
+
     @EventListener
     public void onUserRegistered(UserRegisteredEvent event) {
+        emailChannel.send(
+                adminEmail,
+                "New User Registration - FarmSphere",
+                "A new user has registered on FarmSphere.\n\n"
+                        + "Name  : " + event.getFirstName() + " " + event.getLastName() + "\n"
+                        + "Email : " + event.getEmail() + "\n\n"
+                        + "Login to the admin dashboard to view."
+        );
+
         emailChannel.send(
                 event.getEmail(),
                 "Welcome to FarmSphere!",

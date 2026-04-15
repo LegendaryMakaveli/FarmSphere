@@ -4,18 +4,24 @@ package com.farmSphere.notification.listeners;
 import com.farmSphere.core.event.tool.*;
 import com.farmSphere.notification.channel.EmailChannel;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class ToolListener {
     private final EmailChannel emailChannel;
 
+    @Value("${app.admin.email}")
+    private String adminEmail;
+
     @EventListener
     public void onBookingCreated(ToolBookingCreatedEvent event) {
         emailChannel.send(
-                "briankachelhoffer698@gmail.com",
+                adminEmail,
                 "New Tool Booking Request - FarmSphere",
                 "A new tool booking has been submitted.\n\n"
                         + "Booking ID : " + event.getBookingId() + "\n"
@@ -53,15 +59,11 @@ public class ToolListener {
 
     @EventListener
     public void onToolPickedUp(ToolPickedUpEvent event) {
-        System.out.println("Tool picked up — Booking: "
-                + event.getBookingId()
-                + " | Remaining qty: " + event.getRemainingQuantity());
+        log.info("Tool picked up — Booking: {} | Remaining qty: {}", event.getBookingId(), event.getRemainingQuantity());
     }
 
     @EventListener
     public void onToolReturned(ToolReturnedEvent event) {
-        System.out.println("Tool returned — Booking: "
-                + event.getBookingId()
-                + " | Restored qty: " + event.getRestoredQuantity());
+        log.info("Tool returned — Booking: {} | Restored qty: {}", event.getBookingId(), event.getRestoredQuantity());
     }
 }

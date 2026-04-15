@@ -1,0 +1,48 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: FarmSphere-DB
+    environment:
+      POSTGRES_DB: FarmSphereDB
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Makaveli@1
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U farmsphere"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  farmsphere:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: farmsphere-app
+    ports:
+      - "8080:8080"
+    environment:
+      DATABASE_URL: jdbc:postgresql://localhost:5432/FarmSphereDB
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: Makaveli@1
+
+
+      JWT_SECRET: Em/ik/7gNU3smakavelido+OL0wNhqotreV3g6s1xYv72ol/pe/akoredes5jKTdYw3n1985sP2s7L6pQvL0f3S+b8a9ikkaveliv2x1c1m4n5k77
+      JWT_EXPIRATION: 86400000
+
+      ADMIN_EMAIL: briankachelhoffer698@gmail.com
+      ADMIN_PASSWORD: MakaveliAdmin@1
+
+      CORS_ALLOWED_ORIGINS: http://localhost:3000,http://localhost:5173
+
+      SERVICES_FARMING_URL: http://localhost:8080
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
