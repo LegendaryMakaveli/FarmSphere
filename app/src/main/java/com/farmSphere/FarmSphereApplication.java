@@ -93,10 +93,4 @@ public class FarmSphereApplication {
         }
     }
 
-
-    @Scheduled(fixedRate = 150000)
-    public void keepAlive() {
-        log.debug(" FarmSphere alive: {}", LocalDateTime.now());
-    }
-
 }
