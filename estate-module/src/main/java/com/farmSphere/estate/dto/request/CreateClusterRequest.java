@@ -19,7 +19,7 @@ public class CreateClusterRequest {
     @NotBlank(message = "Primary crop name is required")
     private String primaryCropName;
 
-    @NotBlank(message = "Farming model is required")
+    @NotNull(message = "Farming model is required")
     private FARMING_MODEL farmingModel;
 
     private String description;

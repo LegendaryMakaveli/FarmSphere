@@ -1,7 +1,7 @@
 package com.farmSphere.farming.data.model;
 
 import com.farmSphere.core.enums.CROP_ITEM_ROLE;
-import com.farmSphere.core.enums.YEILD_UNIT;
+import com.farmSphere.core.enums.YIELD_UNIT;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -38,7 +38,7 @@ public class CropPlanItem {
     private float expectedYield;
 
     @Column(nullable = false)
-    private YEILD_UNIT yieldUnit;
+    private YIELD_UNIT yieldUnit;
 
     private float actualYield = 0;
 

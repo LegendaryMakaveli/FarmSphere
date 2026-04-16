@@ -1,6 +1,6 @@
 package com.farmSphere.core.dto;
 
-import com.farmSphere.core.enums.YEILD_UNIT;
+import com.farmSphere.core.enums.YIELD_UNIT;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ public class CropPlanSummary {
         private String role;
         private float expectedYield;
         private float actualYield;
-        private YEILD_UNIT yieldUnit;
+        private YIELD_UNIT yieldUnit;
 
 
         public Long getCropId() { return cropId; }
@@ -29,8 +29,8 @@ public class CropPlanSummary {
         public void setExpectedYield(float expectedYield) { this.expectedYield = expectedYield; }
         public float getActualYield() { return actualYield; }
         public void setActualYield(float actualYield) { this.actualYield = actualYield; }
-        public YEILD_UNIT getYieldUnit() { return yieldUnit; }
-        public void setYieldUnit(YEILD_UNIT yieldUnit) { this.yieldUnit = yieldUnit; }
+        public YIELD_UNIT getYieldUnit() { return yieldUnit; }
+        public void setYieldUnit(YIELD_UNIT yieldUnit) { this.yieldUnit = yieldUnit; }
     }
 
     public Long getCropPlanId() { return cropPlanId; }

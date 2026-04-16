@@ -23,6 +23,14 @@ public class AdminController {
         );
     }
 
+    @GetMapping("/farmers/all")
+    public ResponseEntity<ApiResponse<?>> getAllFarmers() {
+        return ResponseEntity.ok(
+                ApiResponse.success("All farmers fetched",
+                        adminIdentityService.getAllFarmers())
+        );
+    }
+
     @GetMapping("/investors/pending")
     public ResponseEntity<ApiResponse<?>> getPendingInvestors() {
         return ResponseEntity.ok(

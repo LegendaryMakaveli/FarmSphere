@@ -1,11 +1,13 @@
 package com.farmSphere.infrastructure.response;
 
-import lombok.Getter;
+import lombok.Data;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-@Getter
+@Data
+@ToString
 public class ApiResponse<T> {
     private final boolean success;
     private final String message;

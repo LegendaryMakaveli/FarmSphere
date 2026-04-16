@@ -6,6 +6,8 @@ import com.farmSphere.farming.dto.request.CreateCropPlanRequest;
 import com.farmSphere.farming.dto.response.CropPlanItemResponse;
 import com.farmSphere.farming.dto.response.CropPlanResponse;
 
+import java.util.List;
+
 public interface CropPlanService {
     CropPlanResponse createCropPlan(CreateCropPlanRequest request);
     CropPlanItemResponse addIntercrop(Long plotId, Long farmerId, AddIntercropRequest request);
@@ -13,5 +15,5 @@ public interface CropPlanService {
     CropPlanResponse getCropPlanByPlot(Long plotId);
     CropPlanResponse getCropPlanById(Long cropPlanId);
     CropPlanSummary getCropPlanSummary(Long cropPlanId);
-
+    List<CropPlanResponse> getAllCropPlans();
 }

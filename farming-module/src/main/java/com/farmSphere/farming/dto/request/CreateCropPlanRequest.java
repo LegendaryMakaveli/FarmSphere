@@ -1,7 +1,7 @@
 package com.farmSphere.farming.dto.request;
 
 
-import com.farmSphere.core.enums.YEILD_UNIT;
+import com.farmSphere.core.enums.YIELD_UNIT;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -20,7 +20,7 @@ public class CreateCropPlanRequest {
     private float expectedYield;
 
     @NotNull(message = "Yield unit is required")
-    private YEILD_UNIT yieldUnit;
+    private YIELD_UNIT yieldUnit;
 
     private String spacingPattern;
 

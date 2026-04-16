@@ -38,6 +38,24 @@ public class AdminServiceImplementation implements AdminService{
                         farmer.getFarmName(),
                         farmer.getUser().getFirstName(),
                         farmer.getUser().getSecondName(),
+                        farmer.getUser().getEmail(),
+                        farmer.getUser().getAge(),
+                        farmer.getRegistrationStatus()
+                ))
+                .toList();
+    }
+
+    @Override
+    public List<UpgradeFarmerResponse> getAllFarmers() {
+        SecurityUtils.requireAdmin();
+        return farmerRepository.findAll()
+                .stream()
+                .map(farmer -> new UpgradeFarmerResponse(
+                        farmer.getId(),
+                        farmer.getFarmName(),
+                        farmer.getUser().getFirstName(),
+                        farmer.getUser().getSecondName(),
+                        farmer.getUser().getEmail(),
                         farmer.getUser().getAge(),
                         farmer.getRegistrationStatus()
                 ))

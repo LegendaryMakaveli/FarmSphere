@@ -52,11 +52,13 @@ public class CropPlanServiceImplementation implements CropPlanService{
     @Override
     public CropPlanItemResponse addIntercrop(Long plotId, Long farmerId, AddIntercropRequest request) {
         SecurityUtils.requireFarmer();
+        if (!plotId.equals(request.getPlotId())) throw new DomainException("Plot ID mismatch", 400);
+
         CropPlan plan = cropPlanRepository.findByPlotId(plotId).orElseThrow(() -> new DomainException("No crop plan found for this plot", 404));
         if (!plan.isIntercroppingEnabled()) throw new DomainException("Intercropping is not enabled for this plot", 400);
 
         if (cropPlanItemRepository.existsByCropPlanIdAndRole(plan.getCropPlanId(), CROP_ITEM_ROLE.INTERCROP)) throw new DomainException("An intercrop is already added to this plan", 409);
-        Crop crop = cropRepository.findById(request.getCropId()).orElseThrow(() -> new DomainException("Crop not found", 404));
+        Crop crop = cropRepository.findById(request.getIntercropCropId()).orElseThrow(() -> new DomainException("Crop not found", 404));
 
         CropPlanItem intercrop = getIntercrop(request, plan, crop);
         CropPlanItem saved = cropPlanItemRepository.save(intercrop);
@@ -93,9 +95,15 @@ public class CropPlanServiceImplementation implements CropPlanService{
     public CropPlanSummary getCropPlanSummary(Long cropPlanId) {
         CropPlan plan = cropPlanRepository.findById(cropPlanId).orElseThrow(() -> new DomainException("CropPlan not found", 404));
         List<CropPlanItem> items = cropPlanItemRepository.findAllByCropPlanId(cropPlanId);
-        CropPlanSummary dto = cropPlanSummary(plan, items);
 
-        return dto;
+        return cropPlanSummary(plan, items);
+    }
+
+    @Override
+    public List<CropPlanResponse> getAllCropPlans() {
+        return cropPlanRepository.findAll().stream()
+                .map(plan -> CropPlanResponse.from(plan, cropPlanItemRepository.findAllByCropPlanId(plan.getCropPlanId())))
+                .toList();
     }
 
 

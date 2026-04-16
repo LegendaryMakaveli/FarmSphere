@@ -1,7 +1,7 @@
 package com.farmSphere.farming.dto.response;
 
 
-import com.farmSphere.core.enums.YEILD_UNIT;
+import com.farmSphere.core.enums.YIELD_UNIT;
 import com.farmSphere.farming.data.model.CropPlanItem;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +16,7 @@ public class CropPlanItemResponse {
     private String role;
     private String spacingPattern;
     private float expectedYield;
-    private YEILD_UNIT yieldUnit;
+    private YIELD_UNIT yieldUnit;
     private float actualYield;
     private boolean harvested;
 

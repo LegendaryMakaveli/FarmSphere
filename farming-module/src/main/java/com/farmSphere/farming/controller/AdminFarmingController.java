@@ -37,6 +37,13 @@ public class AdminFarmingController {
         return ResponseEntity.ok(ApiResponse.success("Crop", cropService.getCropById(cropId)));
     }
 
+    @GetMapping("/get-all/crop-plans")
+    public ResponseEntity<ApiResponse<?>> getAllCropPlans() {
+        return ResponseEntity.ok(
+                ApiResponse.success("All crop plans", cropPlanService.getAllCropPlans()));
+    }
+
+
     @GetMapping("/get/crop/category/{category}")
     public ResponseEntity<ApiResponse<?>> getCropsByCategory(@PathVariable String category) {
         return ResponseEntity.ok(ApiResponse.success("Crops by category", cropService.getCropsByCategory(PRODUCE_CATEGORY.valueOf(category.toUpperCase()))));
