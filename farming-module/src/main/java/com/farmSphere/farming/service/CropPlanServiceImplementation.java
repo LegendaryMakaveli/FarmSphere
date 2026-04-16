@@ -99,6 +99,24 @@ public class CropPlanServiceImplementation implements CropPlanService{
         return cropPlanSummary(plan, items);
     }
 
+    @Transactional
+    @Override
+    public CropPlanResponse enableIntercropping(Long plotId) {
+        SecurityUtils.requireAdmin();
+        CropPlan plan = cropPlanRepository.findByPlotId(plotId)
+                .orElseThrow(() -> new DomainException("No crop plan found for this plot", 404));
+        
+        if (plan.isIntercroppingEnabled()) {
+            throw new DomainException("Intercropping is already enabled for this plot", 409);
+        }
+
+        plan.setIntercroppingEnabled(true);
+        CropPlan saved = cropPlanRepository.save(plan);
+        
+        return CropPlanResponse.from(saved, cropPlanItemRepository.findAllByCropPlanId(saved.getCropPlanId()));
+    }
+
+
     @Override
     public List<CropPlanResponse> getAllCropPlans() {
         return cropPlanRepository.findAll().stream()

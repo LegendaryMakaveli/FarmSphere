@@ -66,6 +66,11 @@ public class AdminFarmingController {
         return ResponseEntity.ok(ApiResponse.success("Crop plan for plot", cropPlanService.getCropPlanByPlot(plotId)));
     }
 
+    @PatchMapping("/plots/{plotId}/enable-intercropping")
+    public ResponseEntity<ApiResponse<?>> enableIntercropping(@PathVariable Long plotId) {
+        return ResponseEntity.ok(ApiResponse.success("Intercropping enabled for plot", cropPlanService.enableIntercropping(plotId)));
+    }
+
     @PostMapping("/start/farm-cycles")
     public ResponseEntity<ApiResponse<?>> startFarmCycle(@RequestBody @Valid StartFarmCycleRequest request) {
         return ResponseEntity.status(201).body(ApiResponse.success("Farm cycle started", farmCycleService.startFarmCycle(request)));

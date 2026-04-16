@@ -15,5 +15,6 @@ public interface CropPlanService {
     CropPlanResponse getCropPlanByPlot(Long plotId);
     CropPlanResponse getCropPlanById(Long cropPlanId);
     CropPlanSummary getCropPlanSummary(Long cropPlanId);
+    CropPlanResponse enableIntercropping(Long plotId);
     List<CropPlanResponse> getAllCropPlans();
 }
